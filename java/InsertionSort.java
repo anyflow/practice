@@ -21,7 +21,7 @@ class InsertionSort {
     int[] input = new int[] { 3, 1, 5, 9, 0, 10, 5, 32, -1, -20, 239, 583, 6, 3, 54, 53, 38 };
 
     System.out.println("before(" + input.length + ") : " + Arrays.toString(input));
-    
+
     sort(input);
 
     System.out.println("after(" + input.length + ")  : " + Arrays.toString(input));

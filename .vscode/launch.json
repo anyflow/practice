@@ -2,28 +2,23 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "node",
+      "request": "launch",
+      "name": "javascript",
+      "program": "${file}",
+      "cwd": "${workspaceRoot}/javascript",
+      "env": {}
+    },
+    {
       "name": "Java",
       "type": "java",
       "request": "launch",
       "stopOnEntry": true,
       "cwd": "${fileDirname}",
-      "startupClass": "${fileBasename}",
+      "startupClass": "${workspaceRoot}/java/${fileBasename}",
       "jdkPath": "/usr/bin",
       "options": [
       ]
-    },
-    {
-      "name": "Java Console App",
-      "type": "java",
-      "request": "launch",
-      "stopOnEntry": true,
-      "cwd": "${fileDirname}",
-      "startupClass": "${fileBasename}",
-      "options": [
-        "-classpath",
-        "\"${fileDirname};.\""
-      ],
-      "externalConsole": true
     }
   ]
 }
