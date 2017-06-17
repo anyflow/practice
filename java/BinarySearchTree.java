@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Queue;
@@ -175,6 +176,36 @@ public class BinarySearchTree {
     System.out.println(node.key);
   }
 
+  public void levelorderTraverse(Node node) throws Exception {
+    List<Node> start = new ArrayList<Node>();
+    start.add(node);
+
+    levelorderTraverse(start);
+  }
+
+  private void levelorderTraverse(List<Node> current) throws Exception {
+    if (current == null) {
+      throw new Exception("current cannot be null");
+    }
+    if (current.size() <= 0) {
+      return;
+    }
+
+    List<Node> next = new ArrayList<Node>();
+    for (Node item : current) {
+      System.out.println(item.key);
+
+      if (item.left != null) {
+        next.add(item.left);
+      }
+      if (item.right != null) {
+        next.add(item.right);
+      }
+    }
+
+    levelorderTraverse(next);
+  }
+
   public Node root() {
     return root;
   }
@@ -204,6 +235,8 @@ public class BinarySearchTree {
       bst.preorderTraverse(bst.root());
       System.out.println("postorder:");
       bst.postorderTraverse(bst.root());
+      System.out.println("levelorder:");
+      bst.levelorderTraverse(bst.root());
 
       bst.delete(50);
       bst.delete(40);
