@@ -47,8 +47,6 @@ class Trie {
     return node.size;
   }
 
-  static List<String> partials = new ArrayList<String>();
-
   public static void main(String[] args) {
     Trie trie = new Trie();
 
@@ -73,12 +71,8 @@ class Trie {
   //     if (operator.equals("add")) {
   //         contacts.add(operand);
   //     } else {
-  //         partials.add(operand);
+  //         System.out.println(contacts.count(operand));
   //     }
-  //   }
-
-  //   for(String partial : partials) {
-  //     System.out.println(contacts.count(partial));
   //   }
 
   //   scanner.close();
