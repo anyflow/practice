@@ -1,58 +1,52 @@
-public class Queue {
-  private Node left = null;
-  private Node right = null;
+class Queue<T> {
+  Node head = null;
+  Node tail = null;
 
-  public class Node {
-    private Object value;
-    private Node next;
-
-    public Node(Object value) {
-      this.value = value;
+  void enqueue(T item) {
+    Node nodeItem = new Node(item);
+    if (head == null) {
+      head = nodeItem;
+      tail = head;
+      return;
     }
 
-    public Object value() {
-      return value;
-    }
-
-    public Node next() {
-      return next;
-    }
-
-    public void setNext(Node node) {
-      this.next = node;
-    }
+    tail.next = nodeItem;
+    tail = nodeItem;
   }
 
-  public void enqueue(Object value) {
-    Node node = new Node(value);
-
-    Node temp = right;
-    if (temp != null) {
-      temp.setNext(node);
-      right = node;
-    } else {
-      if (left == null) {
-        left = node;
-      } else {
-        right = node;
-        left.setNext(right);
-      }
-    }
-  }
-
-  public Object dequeue() {
-    if (left == null) {
+  T dequeue() {
+    if (head == null) {
       return null;
     }
 
-    Node ret = left;
-    left = left.next();
+    Node ret = head;
+    head = ret.next;
+    if (head == null) {
+      tail = null;
+    }
 
-    return ret.value();
+    return ret.data;
+  }
+
+  T peek() {
+    if (head == null) {
+      return null;
+    }
+    return head.data;
+  }
+
+  class Node {
+    T data;
+    Node next;
+
+    Node(T data) {
+      this.data = data;
+      next = null;
+    }
   }
 
   public static void main(String[] args) {
-    Queue queue = new Queue();
+    Queue<Integer> queue = new Queue<>();
 
     queue.enqueue(1);
     queue.enqueue(2);
@@ -64,6 +58,6 @@ public class Queue {
     do {
       value = queue.dequeue();
       System.out.println(value);
-    } while(value != null);
+    } while (value != null);
   }
 }
