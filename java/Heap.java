@@ -79,6 +79,32 @@ class Heap<T extends Comparable<T>> {
         roomToInsert = findRoom(top, new Level(0));
     }
 
+    Node findLast(Node head, Level level) {
+        if (head == null) {
+            return null;
+        }
+
+        level.level++;
+
+        if (head.left == null && head.right == null) {
+            return head;
+        }
+
+        Level leftLevel = new Level(level.level);
+        Node left = findLast(head.left, leftLevel);
+
+        Level rightLevel = new Level(level.level);
+        Node right = findLast(head.right, rightLevel);
+
+        if (right == null || leftLevel.level > rightLevel.level) {
+            level.level = leftLevel.level;
+            return left;
+        } else {
+            level.level = rightLevel.level;
+            return right;
+        }
+    }
+
     Node findRoom(Node head, Level level) {
         if (head == null) {
             return null;
@@ -132,6 +158,7 @@ class Heap<T extends Comparable<T>> {
         }
 
         if (last == top) {
+            top = last = roomToInsert = null;
             return ret;
         }
 
@@ -143,6 +170,8 @@ class Heap<T extends Comparable<T>> {
         if (last.parent.right == last) {
             last.parent.right = null;
         }
+        roomToInsert = last.parent;
+        last = findLast(top, new Level(0));
 
         Node toSwap = top;
         while (toSwap != null) {
@@ -165,7 +194,7 @@ class Heap<T extends Comparable<T>> {
 
         @Override
         public int compareTo(Item other) {
-            return value - other.value;
+            return other.value - value;
         }
 
         @Override
@@ -174,25 +203,25 @@ class Heap<T extends Comparable<T>> {
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Heap<Item> heap = new Heap<>();
 
-        heap.insert(new Item(6));
-        heap.insert(new Item(1));
-        heap.insert(new Item(3));
-        heap.insert(new Item(2));
-        heap.insert(new Item(5));
-        heap.insert(new Item(4));
-        heap.insert(new Item(7));
+        try {
+            heap.insert(new Item(6));
+            heap.insert(new Item(1));
+            heap.insert(new Item(3));
+            heap.insert(new Item(2));
+            heap.insert(new Item(5));
+            heap.insert(new Item(4));
+            heap.insert(new Item(7));
 
-        System.out.println(heap.pop().value);
-//TODO roomToInsert, last 관리        
-        System.out.println(heap.pop().value);
-        System.out.println(heap.pop().value);
-        System.out.println(heap.pop().value);
-        System.out.println(heap.pop().value);
-        System.out.println(heap.pop().value);
-        System.out.println(heap.pop().value);
-        System.out.println(heap.pop().value);
+            Item inserted = heap.pop();
+            while (inserted != null) {
+                System.out.println(inserted.value);
+                inserted = heap.pop();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
