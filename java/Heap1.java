@@ -1,5 +1,5 @@
 
-class Heap<T extends Comparable<T>> {
+class Heap1<T extends Comparable<T>> {
     class Level {
         int level;
 
@@ -204,7 +204,7 @@ class Heap<T extends Comparable<T>> {
     }
 
     public static void main(String[] args) {
-        Heap<Item> heap = new Heap<>();
+        Heap1<Item> heap = new Heap1<>();
 
         try {
             heap.insert(new Item(6));
