@@ -3,14 +3,6 @@ import java.util.*;
 class Heap2<T extends Comparable<T>> {
     List<T> items = new ArrayList<>();
 
-    class Level {
-        int level;
-
-        Level(int level) {
-            this.level = level;
-        }
-    }
-
     public void insert(T data) {
         items.add(data);
 
@@ -21,9 +13,49 @@ class Heap2<T extends Comparable<T>> {
         swapUp(items.size() - 1);
     }
 
+    public T pop() {
+        if (items.size() <= 0) {
+            return null;
+        }
+
+        T ret = items.get(0);
+
+        items.set(0, items.get(items.size() - 1));
+        items.remove(items.size() - 1);
+
+        swapDown(0);
+
+        return ret;
+    }
+
+    public T peek() {
+        return items.get(0);
+    }
+
+    public void delete(T item) {
+        int index = -1;
+        for(int i = 0; i<items.size(); ++i) {
+            if(items.get(i).compareTo(item) == 0) {
+                index = i;
+                break;
+            }
+        }
+        if(index == -1) {
+            return;
+        }
+
+        items.set(index, items.get(items.size() - 1));
+        items.remove(items.size() - 1);
+
+        swapDown(index);
+    }
+
+
     boolean swapUp(int childIndex) {
         Integer parentIndex = parent(childIndex);
-        if(parentIndex == null) { return false; }
+        if (parentIndex == null) {
+            return false;
+        }
 
         T parentItem = items.get(parentIndex);
         T childItem = items.get(childIndex);
@@ -47,7 +79,7 @@ class Heap2<T extends Comparable<T>> {
         }
 
         int targetIndex;
-        if(rightIndex >= items.size()) {
+        if (rightIndex >= items.size()) {
             targetIndex = leftIndex;
         } else {
             T left = items.get(leftIndex);
@@ -67,27 +99,6 @@ class Heap2<T extends Comparable<T>> {
 
             return swapDown(targetIndex);
         }
-
-
-    }
-
-    public T pop() {
-        if (items.size() <= 0) {
-            return null;
-        }
-
-        T ret = items.get(0);
-
-        items.set(0, items.get(items.size() - 1));
-        items.remove(items.size() - 1);
-
-        swapDown(0);
-
-        return ret;
-    }
-
-    public T peek() {
-        return items.get(0);
     }
 
     Integer parent(int childIndex) {
@@ -95,7 +106,7 @@ class Heap2<T extends Comparable<T>> {
             return null;
         }
 
-        return (int)Math.floor((childIndex - 1) / 2);
+        return (int) Math.floor((childIndex - 1) / 2);
     }
 
     static class Item implements Comparable<Item> {
@@ -107,7 +118,7 @@ class Heap2<T extends Comparable<T>> {
 
         @Override
         public int compareTo(Item other) {
-            return other.value - value;
+            return value - other.value;
         }
 
         @Override
@@ -126,6 +137,8 @@ class Heap2<T extends Comparable<T>> {
         heap.insert(new Item(5));
         heap.insert(new Item(4));
         heap.insert(new Item(7));
+
+        heap.delete(new Item(2));
 
         Item inserted = heap.pop();
         while (inserted != null) {
