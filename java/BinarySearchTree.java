@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Queue;
@@ -143,6 +144,17 @@ public class BinarySearchTree {
     }
   }
 
+  public int height(Node node) {
+    if (node == null) {
+      return 0;
+    }
+
+    int lheight = height(node.left);
+    int rheight = height(node.right);
+
+    return (lheight > rheight ? lheight : rheight) + 1;
+  }
+
   public void inorderTraverse(Node node) {
     if (node.left != null) {
       inorderTraverse(node.left);
@@ -177,33 +189,24 @@ public class BinarySearchTree {
   }
 
   public void levelorderTraverse(Node node) throws Exception {
-    List<Node> start = new ArrayList<Node>();
-    start.add(node);
-
-    levelorderTraverse(start);
-  }
-
-  private void levelorderTraverse(List<Node> current) throws Exception {
-    if (current == null) {
-      throw new Exception("current cannot be null");
-    }
-    if (current.size() <= 0) {
+    if (node == null) {
       return;
     }
 
-    List<Node> next = new ArrayList<Node>();
-    for (Node item : current) {
-      System.out.println(item.key);
+    Queue<Node> queue = new ArrayDeque<>();
 
-      if (item.left != null) {
-        next.add(item.left);
+    queue.add(node);
+    while (queue.peek() != null) {
+      node = queue.poll();
+      System.out.println(node.key);
+
+      if (node.left != null) {
+        queue.add(node.left);
       }
-      if (item.right != null) {
-        next.add(item.right);
+      if (node.right != null) {
+        queue.add(node.right);
       }
     }
-
-    levelorderTraverse(next);
   }
 
   public Node root() {
@@ -228,6 +231,8 @@ public class BinarySearchTree {
       bst.insert(40);
       bst.insert(60);
       bst.insert(80);
+
+      System.out.println("height: " + bst.height(bst.root));
 
       System.out.println("inorder:");
       bst.inorderTraverse(bst.root());
