@@ -1,5 +1,7 @@
 import java.util.*;
 
+//question : https://www.hackerrank.com/challenges/ctci-connected-cell-in-a-grid
+
 class ConnectedCells {
   static int countCells(int[][] matrix, boolean[][] visited, int x, int y) {
     if (x < 0 || x >= matrix.length || y < 0 || y >= matrix[0].length) {
@@ -11,7 +13,7 @@ class ConnectedCells {
 
     visited[x][y] = true;
 
-    int ret = 0;
+    int ret = 1;
 
     ret += countCells(matrix, visited, x - 1, y - 1);
     ret += countCells(matrix, visited, x - 1, y);
