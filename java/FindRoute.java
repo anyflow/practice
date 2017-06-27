@@ -1,14 +1,18 @@
 import java.util.*;
 
-//question : https://www.hackerrank.com/challenges/ctci-connected-cell-in-a-grid
-
 class FindRoute {
   static class Cell {
     int x, y;
+    Cell parent;
 
     Cell(int x, int y) {
+      this(x, y, null);
+    }
+
+    Cell(int x, int y, Cell parent) {
       this.x = x;
       this.y = y;
+      this.parent = parent;
     }
 
     @Override
@@ -58,8 +62,36 @@ class FindRoute {
     return false;
   }
 
-  static boolean BFS(int[][] matrix, boolean[][] visited, List<Cell> route, Cell start, Cell end) {
-    return false;
+  static void BFS(int[][] matrix, boolean[][] visited, Cell start, Cell end) {
+    Queue<Cell> toVisit = new ArrayDeque<>();
+    toVisit.add(start);
+
+    while (toVisit.peek() != null) {
+      Cell target = toVisit.poll();
+      visited[target.x][target.y] = true;
+
+      if (target.equals(end)) {
+        end.parent = target.parent;
+        return;
+      }
+
+      for (int x = -1; x < 2; ++x) {
+        for (int y = -1; y < 2; ++y) {
+          Cell cell = new Cell(target.x + x, target.y + y);
+
+          if (cell.x < 0 || cell.x >= matrix.length || cell.y < 0 || cell.y >= matrix[0].length) {
+            continue;
+          }
+
+          if (matrix[cell.x][cell.y] != 1 || visited[cell.x][cell.y]) {
+            continue;
+          }
+
+          toVisit.add(cell);
+          cell.parent = target;
+        }
+      }
+    }
   }
 
   public static void main(String[] args) {
@@ -84,11 +116,14 @@ class FindRoute {
     route.forEach(i -> System.out.print(i + " - "));
     System.out.println();
 
-    route = new ArrayList<>();
-
-    BFS(matrix, visited, route, start, end);
+    visited = new boolean[matrix.length][matrix[0].length];
+    BFS(matrix, visited, start, end);
 
     System.out.print("via BFS : ");
-    route.forEach(i -> System.out.print(i + " - "));
+    Cell cell = end;
+    while (cell != null) {
+      System.out.print(cell + " - ");
+      cell = cell.parent;
+    }
   }
 }
