@@ -7,31 +7,41 @@ import java.io.*;
 class MaxRectangle {
   static class Sums {
     Map<String, Sum> map = new HashMap<>();
+    Set<Sum> set = new TreeSet<>();
 
     void add(Sum sum) {
       map.put(sum.key(), sum);
+      set.add(sum);
     }
 
-    Sum get(int x, int y) {
-      return map.get(key(x, y));
+    Sum get(int hStart, int hEnd, int vStart, int vEnd) {
+      return map.get(key(hStart, hEnd, vStart, vEnd));
     }
 
-    public static String key(int x, int y) {
-      return x + ":" + y;
+    public static String key(int hStart, int hEnd, int vStart, int vEnd) {
+      return hStart + ":" + hEnd + ":" + vStart + ":" + vEnd;
     }
   }
 
   static class Sum implements Comparable<Sum> {
-    int value, x, y;
+    int value, hStart, hEnd, vStart, vEnd;
 
-    Sum(int x, int y) {
-      this.x = x;
-      this.y = y;
+    Sum(int hStart, int hEnd, int vIndex) {
+      this.hStart = hStart;
+      this.hEnd = hEnd;
+      this.vStart = this.vEnd = vIndex;
+    }
+
+    Sum(int hStart, int hEnd, int vStart, int vEnd) {
+      this.hStart = hStart;
+      this.hEnd = hEnd;
+      this.vStart = vStart;
+      this.vEnd = vEnd;
     }
 
     @Override
     public String toString() {
-      return x + " : " + y + " = " + value;
+      return hStart + " : " + hEnd + " : " + vStart + " : " + vEnd + " = " + value;
     }
 
     @Override
@@ -40,43 +50,56 @@ class MaxRectangle {
     }
 
     public String key() {
-      return Sums.key(x, y);
+      return Sums.key(hStart, hEnd, vStart, vEnd);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      Sum other = (Sum) o;
+
+      return hStart == other.hStart && hEnd == other.hEnd && vStart == other.vStart && vEnd == other.vEnd;
     }
   }
 
-  public static void sum(Sums sums, int[] arr, int start, int end) {
-    Sum ret = new Sum(start, end);
+  public static void sum(Sums sums, int[][] arr, int hStart, int hEnd, int vStart, int vEnd) {
+    Sum ret = new Sum(hStart, hEnd, vStart, vEnd);
 
-    if (end == 0) {
-      ret.value = arr[end];
+    int lefterPrev = 0;
+    if (hStart == hEnd) {
+      lefterPrev = 0;
     } else {
-      Sum prev = sums.get(start, end - 1);
-      ret.value = (prev == null ? 0 : prev.value) + arr[end];
+      int prevAll = sums.get(hStart, hEnd - 1, vStart, vEnd).value;
+      lefterPrev = prevAll - (vStart == vEnd ? 0 : sums.get(hStart, hEnd - 1, vStart, vEnd - 1).value);
     }
+
+    int upperPrev = vStart == vEnd ? 0 : sums.get(hStart, hEnd, vStart, vEnd - 1).value;
+
+    ret.value = lefterPrev + upperPrev + arr[vEnd][hEnd];
 
     sums.add(ret);
     System.out.println(ret);
   }
 
-  static Sums max1ds(int[] arr) {
-    Sums sums = new Sums();
-
-    for (int i = 0; i < arr.length; ++i) {
-      for (int j = i; j < arr.length; ++j) {
-        sum(sums, arr, i, j);
-      }
-    }
-
-    return sums;
-  }
-
   public static void main(String[] args) {
-    int[][] array = new int[][] { { 1, 2, -1, 4, -20 }, { -8, -3, 4, 2, 1 }, { 3, 8, 10, -8, 3 },
-        { -4, -1, 1, 7, -6 } };
+    try {
+      int[][] array = new int[][] { { 1, 2, -1, 4, -20 }, { -8, -3, 4, 2, 1 }, { 3, 8, 10, -8, 3 },
+          { -4, -1, 1, 7, -6 } };
 
-    List<Sums> sumsList = new ArrayList<Sums>();
-    for (int i = 0; i < array.length; ++i) {
-      sumsList.add(max1ds(array[i]));
+      Sums sums = new Sums();
+
+      for (int vStart = 0; vStart < array.length; ++vStart) {
+        for (int vEnd = vStart; vEnd < array.length; ++vEnd) {
+          for (int hStart = 0; hStart < array[0].length; ++hStart) {
+            for (int hEnd = hStart; hEnd < array[0].length; ++hEnd) {
+              sum(sums, array, hStart, hEnd, vStart, vEnd);
+            }
+          }
+        }
+      }
+
+      System.out.println("max : " + sums.set.iterator().next());
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 }
