@@ -41,7 +41,7 @@ class MaxRectangle {
 
     @Override
     public String toString() {
-      return hStart + " : " + hEnd + " : " + vStart + " : " + vEnd + " = " + value;
+      return vStart + " : " + vEnd + " : " + hStart + " : " + hEnd + " = " + value;
     }
 
     @Override
