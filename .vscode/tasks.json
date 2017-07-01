@@ -13,7 +13,6 @@
         },
         {
             "taskName": "C++ build",
-            "isBuildCommand": true,
             "command": "g++",
             "args": ["-g", "${workspaceRoot}/cpp/${fileBasename}", "-o", "${workspaceRoot}/cpp/bin/${fileBasenameNoExtension}", "-std=c++14"]
         }
