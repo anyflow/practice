@@ -1,16 +1,21 @@
 {
-  // See https://go.microsoft.com/fwlink/?LinkId=733558
-  // for the documentation about the tasks.json format
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
     "version": "0.1.0",
-    "command": "javac",
     "isShellCommand": true,
     "showOutput": "always",
     "isWatching": true,
     "suppressTaskName": true,
-    "tasks": [
-        {
-            "taskName": "build",
+    "tasks": [{
+            "taskName": "java build",
+            "command": "javac",
             "args": ["-g", "${file}"]
+        },
+        {
+            "taskName": "C++ build",
+            "isBuildCommand": true,
+            "command": "g++",
+            "args": ["-g", "${workspaceRoot}/cpp/${fileBasename}", "-o", "${workspaceRoot}/cpp/bin/${fileBasenameNoExtension}", "-std=c++14"]
         }
     ]
 }
