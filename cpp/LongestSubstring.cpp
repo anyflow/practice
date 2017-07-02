@@ -1,5 +1,5 @@
 // question :
-// http://practice.geeksforgeeks.org/problems/smallest-distant-window/0
+// http://practice.geeksforgeeks.org/problems/longest-distinct-characters-in-string/0
 
 #include <iostream>
 #include <map>
@@ -52,15 +52,11 @@ pair<int, string> maxDistinctWindow(string target) {
 }
 
 int main() {
-  string testcases[] = {"", "a", "aabcbcdbca", "aaab",
-                        "lcpsklryvmcpjnbpbwllsrehfmxrkecwitrsglrexvtjmxypunbqfg"
-                        "xmuvgfajclfvenhyuhuorjosamibdn"};
-  // 0, 1, 4, 2, 55
+  string testcases[] = {"", "a", "abababcdefababcdab", "geeksforgeeks"};
+  // 0, 1, 6, 7
 
   for (auto item : testcases) {
     auto answer = maxDistinctWindow(item);
-
-    cout << "testcase size : " << item.length() << endl;
 
     cout << "window : " << answer.second << " / size : " << answer.first
          << endl;
