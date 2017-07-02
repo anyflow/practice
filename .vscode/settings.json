@@ -4,5 +4,13 @@
     "**/.git": true,
     "**/*.class": true,
     "**/.DS_Store": true
+  },
+  "files.associations": {
+    "*.jsx": "javascript",
+    ".clang-format": "yaml",
+    "map": "cpp",
+    "queue": "cpp",
+    "__locale": "cpp",
+    "string": "cpp"
   }
 }

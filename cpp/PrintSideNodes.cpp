@@ -65,7 +65,7 @@ void printCorner(Node* root) {
   }
 }
 
-int main() {
+int main(int argc, char* argv[]) {
   Node* head = new Node(15);
   head->left = new Node(10);
   head->left->left = new Node(8);
@@ -75,4 +75,6 @@ int main() {
   head->right->right = new Node(25);
 
   printCorner(head);
+
+  return 0;
 }
