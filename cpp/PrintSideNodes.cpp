@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string>
 #include <tuple>
+#include <vector>
 
 using namespace std;
 
@@ -25,36 +26,37 @@ public:
   string toString() { return std::to_string(key); }
 };
 
-void printCorner(Node* root) {
-  std::queue<Node*> queue;
-  std::map<Node*, tuple<bool, bool>> map;
-
-  queue.push(root);
-  map[root] = make_tuple(true, true);
-
-  while (!queue.empty()) {
-    Node* node = queue.front();
-
-    if (get<0>(map[node]) || get<1>(map[node])) {
-      cout << node->key << " ";
-    }
-
-    if (node->left != nullptr) {
-      if (get<0>(map[node])) {
-        queue.push(node->left);
-        map[node->left] = make_tuple(true, false);
-      }
-    }
-
-    if (node->right != nullptr) {
-      if (get<1>(map[node])) {
-        queue.push(node->right);
-        map[node->right] = make_tuple(false, true);
-      }
-    }
-
-    queue.pop();
+void printCornerInner(vector<Node*>& nodes) {
+  if (nodes.size() <= 0) {
+    return;
   }
+
+  vector<Node*> nextNodes;
+  for (auto it = nodes.begin(); it != nodes.end(); ++it) {
+    if (it == nodes.begin() || it == nodes.end() - 1) {
+      cout << (*it)->key << " ";
+    }
+
+    if ((*it)->left != nullptr) {
+      nextNodes.push_back((*it)->left);
+    }
+    if ((*it)->right != nullptr) {
+      nextNodes.push_back((*it)->right);
+    }
+  }
+
+  printCornerInner(nextNodes);
+}
+
+void printCorner(Node* root) {
+  if (root == nullptr) {
+    return;
+  }
+
+  vector<Node*> nextNodes;
+  nextNodes.push_back(root);
+
+  printCornerInner(nextNodes);
 }
 
 void insert(struct Node* root, int n1, int n2, char lr) {
@@ -115,13 +117,13 @@ Node* parse(string& target) {
 }
 
 int main(int argc, char* argv[]) {
-  string testcases[] = {
-      "15 10 L 10 8 L 10 12 R 15 20 R 20 16 L 20 25 R",
-      "4 1 L 4 2 R 1 6 L 1 10 R 2 2 L 2 3 R 6 9 L 6 1 R 10 10 "
-      "L 10 3 R 2 5 L 2 10 R 3 1 L 3 10 R"};
+  string testcases[] = {"15 10 L 10 8 L 10 12 R 15 20 R 20 16 L 20 25 R",
+                        "4 1 L 4 2 R 1 6 L 1 10 R 2 2 L 2 3 R 6 9 L 6 1 R 10 "
+                        "10 L 10 3 R 2 5 L 2 10 R 3 1 L 3 10 R"};
 
   for (auto item : testcases) {
     printCorner(parse(item));
+    cout << endl;
   }
 
   return 0;
