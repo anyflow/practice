@@ -4,12 +4,11 @@
     "version": "0.1.0",
     "isShellCommand": true,
     "showOutput": "always",
-    "isWatching": true,
     "suppressTaskName": true,
     "tasks": [{
             "taskName": "java build",
             "command": "javac",
-            "args": ["-g", "${file}"]
+            "args": ["-g", "${file}", "-d", "${workspaceRoot}/java/bin/"]
         },
         {
             "taskName": "C++ build",

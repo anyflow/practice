@@ -1,6 +1,5 @@
 #java
-**/bin
-**/*.class
+java/bin
 
 #cpp
 cpp/bin

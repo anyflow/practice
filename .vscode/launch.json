@@ -1,6 +1,7 @@
 {
   "version": "0.2.0",
   "configurations": [
+
     {
       "name": "C++",
       "type": "cppdbg",
@@ -25,23 +26,27 @@
       }
     },
     {
+      "name": "Java",
+      "type": "java",
+      "request": "launch",
+      "stopOnEntry": true,
+      "cwd": "${fileDirname}",
+      "startupClass": "${fileBasename}",
+      "sourcePath": [
+        "${workspaceRoot}/java"
+      ],
+      "jdkPath": "/usr/bin",
+      "options": [
+        "-classpath", "${workspaceRoot}/java/bin"
+      ]
+    },
+    {
       "type": "node",
       "request": "launch",
       "name": "javascript",
       "program": "${file}",
       "cwd": "${workspaceRoot}/javascript",
       "env": {}
-    },
-    {
-      "name": "Java",
-      "type": "java",
-      "request": "launch",
-      "stopOnEntry": true,
-      "cwd": "${fileDirname}",
-      "startupClass": "${workspaceRoot}/java/${fileBasename}",
-      "jdkPath": "/usr/bin",
-      "options": [
-      ]
     }
   ]
 }

@@ -2,7 +2,6 @@
 {
   "files.exclude": {
     "**/.git": true,
-    "**/*.class": true,
     "**/.DS_Store": true
   },
   "files.associations": {
@@ -11,6 +10,7 @@
     "map": "cpp",
     "queue": "cpp",
     "__locale": "cpp",
-    "string": "cpp"
+    "string": "cpp",
+    "slist": "cpp"
   }
 }
