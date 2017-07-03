@@ -60,5 +60,7 @@ int main() {
 
     cout << "window : " << answer.second << " / size : " << answer.first
          << endl;
+
+    return 0;
   }
 }
