@@ -11,22 +11,13 @@
 
 using namespace std;
 
-class Node {
-public:
+struct Node {
   int key;
   Node* left;
   Node* right;
-
-  Node(int key) {
-    this->key = key;
-    left = nullptr;
-    right = nullptr;
-  }
-
-  string toString() { return std::to_string(key); }
 };
 
-void printCornerInner(vector<Node*>& nodes) {
+void printCornerInner(vector<Node*>& nodes, string& ret) {
   if (nodes.size() <= 0) {
     return;
   }
@@ -35,6 +26,8 @@ void printCornerInner(vector<Node*>& nodes) {
   for (auto it = nodes.begin(); it != nodes.end(); ++it) {
     if (it == nodes.begin() || it == nodes.end() - 1) {
       cout << (*it)->key << " ";
+      ret.append(to_string((*it)->key));
+      ret.append(" ");
     }
 
     if ((*it)->left != nullptr) {
@@ -45,30 +38,32 @@ void printCornerInner(vector<Node*>& nodes) {
     }
   }
 
-  printCornerInner(nextNodes);
+  printCornerInner(nextNodes, ret);
 }
 
-void printCorner(Node* root) {
+string printCorner(Node* root) {
+  string ret;
+
   if (root == nullptr) {
-    return;
+    return ret;
   }
 
   vector<Node*> nextNodes;
   nextNodes.push_back(root);
 
-  printCornerInner(nextNodes);
+  printCornerInner(nextNodes, ret);
 }
 
-void insert(struct Node* root, int n1, int n2, char lr) {
+void insert(Node* root, int n1, int n2, char lr) {
   if (root == NULL)
     return;
   if (root->key == n1) {
     switch (lr) {
     case 'L':
-      root->left = new Node(n2);
+      root->left = new Node{n2, nullptr, nullptr};
       break;
     case 'R':
-      root->right = new Node(n2);
+      root->right = new Node{n2, nullptr, nullptr};
       break;
     }
   } else {
@@ -97,7 +92,7 @@ Node* parse(string& target) {
     switch (count % 3) {
     case 0:
       if (root == nullptr) {
-        root = new Node(n1);
+        root = new Node{n1, nullptr, nullptr};
       }
 
       insert(root, n1, n2, item[0]);
@@ -122,7 +117,7 @@ int main(int argc, char* argv[]) {
                         "10 L 10 3 R 2 5 L 2 10 R 3 1 L 3 10 R"};
 
   for (auto item : testcases) {
-    printCorner(parse(item));
+    string ret = printCorner(parse(item));
     cout << endl;
   }
 

@@ -11,35 +11,24 @@
 
 using namespace std;
 
-class Node;
-
-int printCount(Node* root, int k) { return -1; }
-
-class Node {
-public:
+struct Node {
   int key;
   Node* left;
   Node* right;
-
-  Node(int key) {
-    this->key = key;
-    left = nullptr;
-    right = nullptr;
-  }
-
-  string toString() { return std::to_string(key); }
 };
 
-void insert(struct Node* root, int n1, int n2, char lr) {
+int printCount(Node* root, int k) { return -1; }
+
+void insert(Node* root, int n1, int n2, char lr) {
   if (root == NULL)
     return;
   if (root->key == n1) {
     switch (lr) {
     case 'L':
-      root->left = new Node(n2);
+      root->left = new Node{n2, nullptr, nullptr};
       break;
     case 'R':
-      root->right = new Node(n2);
+      root->right = new Node{n2, nullptr, nullptr};
       break;
     }
   } else {
@@ -68,7 +57,7 @@ Node* parse(string& target) {
     switch (count % 3) {
     case 0:
       if (root == nullptr) {
-        root = new Node(n1);
+        root = new Node{n1, nullptr, nullptr};
       }
 
       insert(root, n1, n2, item[0]);

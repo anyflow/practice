@@ -1,14 +1,26 @@
 #include <algorithm>
 #include <iostream>
+#include <string>
 
 using namespace std;
 
+auto t = [](auto a, auto b) { return a + b; };
+
 int main() {
-  vector<int> array = {1, 5, 3, 10, 38, 27, 68, 7, 38, 5};
+  int a = 1, b = 2;
 
-  sort(array.begin(), array.end() - 3, [](auto a, auto b) { return b > a; });
+  int ret = t(a, b);
 
-  for (auto i : array) {
-    cout << i << endl;
-  }
+  a = 3;
+  b = 4;
+
+  ret = t(a, b);
+
+  double c, d;
+  c = 3.5;
+  d = 2.5;
+
+  auto doubleTemp = t(c, d);
+
+  cout << ret << endl;
 }
