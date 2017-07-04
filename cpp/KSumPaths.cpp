@@ -1,6 +1,7 @@
 // question :
 // http://practice.geeksforgeeks.org/problems/leftmost-and-rightmost-nodes-of-binary-tree/1
 
+#include <algorithm>
 #include <iostream>
 #include <map>
 #include <queue>
@@ -11,13 +12,129 @@
 
 using namespace std;
 
+struct GNode {
+  int data;
+  GNode* parent;
+  vector<GNode*> list;
+};
+
 struct Node {
   int key;
   Node* left;
   Node* right;
 };
 
-int printCount(Node* root, int k) { return -1; }
+auto toGraph(Node* root) {
+  auto ret = map<Node*, GNode*>();
+
+  auto q = queue<Node*>();
+
+  q.push(root);
+  ret[root] = new GNode{root->key};
+
+  while (!q.empty()) {
+    root = q.front();
+
+    if (root->left) {
+      ret[root->left] = new GNode{root->left->key};
+      ret[root->left]->list.push_back(ret[root]);
+
+      ret[root]->list.push_back(ret[root->left]);
+
+      q.push(root->left);
+    }
+
+    if (root->right) {
+      ret[root->right] = new GNode{root->right->key};
+      ret[root->right]->list.push_back(ret[root]);
+
+      ret[root]->list.push_back(ret[root->right]);
+
+      q.push(root->right);
+    }
+
+    q.pop();
+  }
+
+  return ret;
+}
+
+bool isSame(vector<GNode*>* a, vector<GNode*>* b) {
+  if (a->size() != b->size()) {
+    return false;
+  }
+
+  auto comp = [](auto l, auto r) { return l->data - r->data; };
+
+  sort(a->begin(), a->end(), comp);
+  sort(b->begin(), b->end(), comp);
+
+  for (int i = 0; i < a->size(); ++i) {
+    if ((*a)[i]->data != (*b)[i]->data) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+int sum(auto path) {
+  int ret = 0;
+  for (auto item : *path) {
+    ret += item->data;
+  }
+
+  return ret;
+}
+
+auto bfs(int k, GNode* startNode) {
+  auto paths = map<GNode*, vector<GNode*>*>();
+  auto sums = vector<vector<GNode*>*>();
+  auto visited = map<GNode*, bool>();
+
+  auto q = queue<GNode*>();
+  q.push(startNode);
+
+  while (!q.empty()) {
+    auto node = q.front();
+
+    if (visited[node]) {
+      q.pop();
+      continue;
+    }
+    visited[node] = true;
+
+    auto path = new vector<GNode*>();
+    path->push_back(node);
+
+    if (node->parent != nullptr) {
+      copy(paths[node->parent]->begin(), paths[node->parent]->end(),
+           path->begin());
+    }
+
+    paths[node] = path;
+
+    if (sum(path) == k) {
+      sums.push_back(path);
+    }
+
+    for (auto item : node->list) {
+      q.push(item);
+    }
+
+    q.pop();
+  }
+
+  return sums;
+}
+
+int printCount(Node* root, int k) {
+  auto g = toGraph(root);
+
+  auto node = g.begin()->second;
+
+  return -1;
+}
 
 void insert(Node* root, int n1, int n2, char lr) {
   if (root == NULL)
