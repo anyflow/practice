@@ -5,6 +5,7 @@
 #include <iostream>
 #include <map>
 #include <queue>
+#include <set>
 #include <sstream>
 #include <string>
 #include <tuple>
@@ -12,10 +13,10 @@
 
 using namespace std;
 
-struct GNode {
+struct Vertex {
   int data;
-  GNode* parent;
-  vector<GNode*> list;
+  Vertex* parent;
+  vector<Vertex*> list;
 };
 
 struct Node {
@@ -24,19 +25,19 @@ struct Node {
   Node* right;
 };
 
-auto toGraph(Node* root) {
-  auto ret = map<Node*, GNode*>();
+map<Node*, Vertex*> toGraph(Node* root) {
+  auto ret = map<Node*, Vertex*>();
 
   auto q = queue<Node*>();
 
   q.push(root);
-  ret[root] = new GNode{root->key};
+  ret[root] = new Vertex{root->key};
 
   while (!q.empty()) {
     root = q.front();
 
     if (root->left) {
-      ret[root->left] = new GNode{root->left->key};
+      ret[root->left] = new Vertex{root->left->key};
       ret[root->left]->list.push_back(ret[root]);
 
       ret[root]->list.push_back(ret[root->left]);
@@ -45,7 +46,7 @@ auto toGraph(Node* root) {
     }
 
     if (root->right) {
-      ret[root->right] = new GNode{root->right->key};
+      ret[root->right] = new Vertex{root->right->key};
       ret[root->right]->list.push_back(ret[root]);
 
       ret[root]->list.push_back(ret[root->right]);
@@ -59,26 +60,15 @@ auto toGraph(Node* root) {
   return ret;
 }
 
-bool isSame(vector<GNode*>* a, vector<GNode*>* b) {
-  if (a->size() != b->size()) {
-    return false;
+struct VertexComp {
+  bool operator()(const Vertex* lhs, const Vertex* rhs) const {
+    return lhs->data < rhs->data;
   }
+};
 
-  auto comp = [](auto l, auto r) { return l->data - r->data; };
+using Path = set<Vertex*, VertexComp>;
 
-  sort(a->begin(), a->end(), comp);
-  sort(b->begin(), b->end(), comp);
-
-  for (int i = 0; i < a->size(); ++i) {
-    if ((*a)[i]->data != (*b)[i]->data) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-int sum(auto path) {
+int sum(Path* path) {
   int ret = 0;
   for (auto item : *path) {
     ret += item->data;
@@ -87,53 +77,73 @@ int sum(auto path) {
   return ret;
 }
 
-auto bfs(int k, GNode* startNode) {
-  auto paths = map<GNode*, vector<GNode*>*>();
-  auto sums = vector<vector<GNode*>*>();
-  auto visited = map<GNode*, bool>();
+struct PathComp {
+  bool operator()(const Path* lhs, const Path* rhs) const {
+    if (lhs->size() >= rhs->size()) {
+      return false;
+    }
 
-  auto q = queue<GNode*>();
-  q.push(startNode);
+    auto lIt = lhs->begin();
+    auto rIt = rhs->begin();
+
+    while (rIt != lhs->end()) {
+      if ((*lIt)->data >= (*rIt)->data) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+};
+
+using Sums = set<Path*, PathComp>;
+
+void bfs(int k, Vertex* startVertex, Sums& sums) {
+  auto paths = map<Vertex*, Path*>();
+  auto visited = map<Vertex*, bool>();
+
+  auto q = queue<Vertex*>();
+  q.push(startVertex);
 
   while (!q.empty()) {
-    auto node = q.front();
+    auto vertex = q.front();
 
-    if (visited[node]) {
+    if (visited[vertex]) {
       q.pop();
       continue;
     }
-    visited[node] = true;
+    visited[vertex] = true;
 
-    auto path = new vector<GNode*>();
-    path->push_back(node);
+    auto path = vertex->parent != nullptr
+                    ? new Path(paths[vertex->parent]->begin(),
+                               paths[vertex->parent]->end(), VertexComp())
+                    : new Path();
+    path->insert(vertex);
 
-    if (node->parent != nullptr) {
-      copy(paths[node->parent]->begin(), paths[node->parent]->end(),
-           path->begin());
-    }
-
-    paths[node] = path;
+    paths[vertex] = path;
 
     if (sum(path) == k) {
-      sums.push_back(path);
+      sums.insert(path);
     }
 
-    for (auto item : node->list) {
+    for (auto item : vertex->list) {
+      item->parent = vertex;
       q.push(item);
     }
 
     q.pop();
   }
-
-  return sums;
 }
 
 int printCount(Node* root, int k) {
   auto g = toGraph(root);
+  auto sums = Sums();
 
-  auto node = g.begin()->second;
+  for (auto item : g) {
+    bfs(k, item.second, sums);
+  }
 
-  return -1;
+  return sums.size();
 }
 
 void insert(Node* root, int n1, int n2, char lr) {
@@ -194,9 +204,7 @@ Node* parse(string& target) {
 }
 
 int main(int argc, char* argv[]) {
-  string testcases[] = {"15 10 L 10 8 L 10 12 R 15 20 R 20 16 L 20 25 R",
-                        "4 1 L 4 2 R 1 6 L 1 10 R 2 2 L 2 3 R 6 9 L 6 1 R 10 "
-                        "10 L 10 3 R 2 5 L 2 10 R 3 1 L 3 10 R"};
+  string testcases[] = {"1 3 L 3 2 L 3 -1 R -1 1 R"};
 
   int k = 4;
 
