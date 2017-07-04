@@ -12,61 +12,13 @@
 #include <vector>
 
 using namespace std;
-
-struct Vertex {
-  int data;
-  Vertex* parent;
-  vector<Vertex*> list;
-};
-
 struct Node {
-  int key;
+  int data;
   Node* left;
   Node* right;
 };
 
-map<Node*, Vertex*> toGraph(Node* root) {
-  auto ret = map<Node*, Vertex*>();
-
-  auto q = queue<Node*>();
-
-  q.push(root);
-  ret[root] = new Vertex{root->key};
-
-  while (!q.empty()) {
-    root = q.front();
-
-    if (root->left) {
-      ret[root->left] = new Vertex{root->left->key};
-      ret[root->left]->list.push_back(ret[root]);
-
-      ret[root]->list.push_back(ret[root->left]);
-
-      q.push(root->left);
-    }
-
-    if (root->right) {
-      ret[root->right] = new Vertex{root->right->key};
-      ret[root->right]->list.push_back(ret[root]);
-
-      ret[root]->list.push_back(ret[root->right]);
-
-      q.push(root->right);
-    }
-
-    q.pop();
-  }
-
-  return ret;
-}
-
-struct VertexComp {
-  bool operator()(const Vertex* lhs, const Vertex* rhs) const {
-    return lhs->data < rhs->data;
-  }
-};
-
-using Path = set<Vertex*, VertexComp>;
+using Path = vector<Node*>;
 
 int sum(Path* path) {
   int ret = 0;
@@ -77,58 +29,42 @@ int sum(Path* path) {
   return ret;
 }
 
-struct PathComp {
-  bool operator()(const Path* lhs, const Path* rhs) const {
-    if (lhs->size() >= rhs->size()) {
-      return false;
-    }
+void bfs(int k, Node* startNode, vector<Path*>& sums) {
+  auto paths = map<Node*, Path*>();
+  auto visited = map<Node*, bool>();
+  auto parents = map<Node*, Node*>();
 
-    auto lIt = lhs->begin();
-    auto rIt = rhs->begin();
-
-    while (rIt != lhs->end()) {
-      if ((*lIt)->data >= (*rIt)->data) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-};
-
-using Sums = set<Path*, PathComp>;
-
-void bfs(int k, Vertex* startVertex, Sums& sums) {
-  auto paths = map<Vertex*, Path*>();
-  auto visited = map<Vertex*, bool>();
-
-  auto q = queue<Vertex*>();
-  q.push(startVertex);
+  auto q = queue<Node*>();
+  q.push(startNode);
 
   while (!q.empty()) {
-    auto vertex = q.front();
+    auto node = q.front();
 
-    if (visited[vertex]) {
+    if (visited[node]) {
       q.pop();
       continue;
     }
-    visited[vertex] = true;
+    visited[node] = true;
 
-    auto path = vertex->parent != nullptr
-                    ? new Path(paths[vertex->parent]->begin(),
-                               paths[vertex->parent]->end(), VertexComp())
+    auto path = parents.find(node) != parents.end()
+                    ? new Path(paths[parents[node]]->begin(),
+                               paths[parents[node]]->end())
                     : new Path();
-    path->insert(vertex);
+    path->push_back(node);
 
-    paths[vertex] = path;
+    paths[node] = path;
 
     if (sum(path) == k) {
-      sums.insert(path);
+      sums.push_back(path);
     }
 
-    for (auto item : vertex->list) {
-      item->parent = vertex;
-      q.push(item);
+    if (node->left) {
+      parents[node->left] = node;
+      q.push(node->left);
+    }
+    if (node->right) {
+      parents[node->right] = node;
+      q.push(node->right);
     }
 
     q.pop();
@@ -136,20 +72,40 @@ void bfs(int k, Vertex* startVertex, Sums& sums) {
 }
 
 int printCount(Node* root, int k) {
-  auto g = toGraph(root);
-  auto sums = Sums();
+  auto sums = vector<Path*>();
 
-  for (auto item : g) {
-    bfs(k, item.second, sums);
+  auto q = queue<Node*>();
+  q.push(root);
+
+  while (!q.empty()) {
+    root = q.front();
+    bfs(k, root, sums);
+
+    if (root->left) {
+      q.push(root->left);
+    }
+    if (root->right) {
+      q.push(root->right);
+    }
+
+    q.pop();
   }
 
+  for (auto item : sums) {
+    cout << "size : " << item->size() << " | ";
+
+    for (auto node : *item) {
+      cout << node->data << " ";
+    }
+    cout << endl;
+  }
   return sums.size();
 }
 
 void insert(Node* root, int n1, int n2, char lr) {
   if (root == NULL)
     return;
-  if (root->key == n1) {
+  if (root->data == n1) {
     switch (lr) {
     case 'L':
       root->left = new Node{n2, nullptr, nullptr};
@@ -204,12 +160,13 @@ Node* parse(string& target) {
 }
 
 int main(int argc, char* argv[]) {
-  string testcases[] = {"1 3 L 3 2 L 3 -1 R -1 1 R"};
-
-  int k = 4;
+  auto testcases = map<int, string>();
+  testcases[4] = "1 3 L 3 2 L 3 -1 R -1 1 R";
+  testcases[3] = "0 1 L 0 2 R 1 3 L 1 4 R 2 5 L 2 6 R";
 
   for (auto item : testcases) {
-    cout << printCount(parse(item), k) << endl;
+    cout << "k=" << item.first << "|tree:" << item.second << endl;
+    cout << printCount(parse(item.second), item.first) << endl;
   }
 
   return 0;

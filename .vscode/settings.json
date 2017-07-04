@@ -11,6 +11,9 @@
     "queue": "cpp",
     "__locale": "cpp",
     "string": "cpp",
-    "slist": "cpp"
+    "slist": "cpp",
+    "__split_buffer": "cpp",
+    "deque": "cpp",
+    "vector": "cpp"
   }
 }
