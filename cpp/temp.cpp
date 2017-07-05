@@ -7,37 +7,21 @@ using namespace std;
 
 auto t = [](auto a, auto b) { return a + b; };
 
-struct Temp {
+struct Node {
   int data;
-
-  ~Temp() { data = INT_MAX; }
 };
 
-Temp newTemp() {
-  Temp ret = Temp{13579};
-
-  return ret;
-}
+struct NodeEx : public Node {
+  Node* parent;
+  // NodeEx(Node* node) : data(node->data), left(node->left), right(node->right)
+  // {}
+  NodeEx() {}
+  NodeEx(Node* node, Node* parent) : Node{node->data}, parent(parent) {}
+};
 
 int main() {
-  int a = 1, b = 2;
+  auto node = new Node{11};
+  auto n1 = new NodeEx(node, nullptr);
 
-  int ret = t(a, b);
-
-  a = 3;
-  b = 4;
-
-  ret = t(a, b);
-
-  double c, d;
-  c = 3.5;
-  d = 2.5;
-
-  auto doubleTemp = t(c, d);
-
-  cout << ret << endl;
-
-  auto temp = newTemp();
-
-  cout << temp.data << endl;
+  cout << node->data << endl;
 }

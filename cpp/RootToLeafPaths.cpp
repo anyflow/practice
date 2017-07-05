@@ -7,6 +7,7 @@
 #include <queue>
 #include <set>
 #include <sstream>
+#include <stack>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -18,48 +19,90 @@ struct Node {
   Node* right;
 };
 
-using Path = vector<Node*>;
+struct NodeEx : Node {
+  NodeEx* parent;
+
+  NodeEx() {}
+  NodeEx(Node* node, NodeEx* parent)
+      : Node{node->data, node->left, node->right}, parent(parent) {}
+};
+
+struct NodeComp {
+  bool operator()(const NodeEx* lhs, const NodeEx* rhs) const {
+    auto l = (NodeEx*)lhs;
+    auto r = (NodeEx*)rhs;
+    auto preL = (NodeEx*)lhs;
+    auto preR = (NodeEx*)rhs;
+
+    l = l->parent;
+
+    if (l == r) {
+      return preL->data == l->left->data;
+    }
+
+    while (l != nullptr) {
+      while (r != nullptr) {
+        if (l == r) {
+          return preL->data == l->left->data;
+        }
+
+        preR = r;
+        r = r->parent;
+      }
+      preL = l;
+      l = l->parent;
+
+      r = preR = (NodeEx*)rhs;
+    }
+
+    return false;
+  }
+};
 
 void printPaths(Node* root) {
-  auto paths = map<Node*, Path*>();
-  auto parents = map<Node*, Node*>();
-  auto leafPaths = vector<Path*>();
+  auto leafs = set<NodeEx*, NodeComp>();
 
-  auto q = queue<Node*>();
-  q.push(root);
+  auto q = queue<NodeEx*>();
+  q.push(new NodeEx(root, nullptr));
 
   while (!q.empty()) {
     auto node = q.front();
 
-    auto path = parents.find(node) != parents.end()
-                    ? new Path(paths[parents[node]]->begin(),
-                               paths[parents[node]]->end())
-                    : new Path();
-    path->push_back(node);
-
-    paths[node] = path;
-
     if (!node->left && !node->right) {
-      leafPaths.push_back(path);
+      leafs.insert(node);
     }
 
     if (node->left) {
-      parents[node->left] = node;
-      q.push(node->left);
+      q.push(new NodeEx(node->left, node));
     }
     if (node->right) {
-      parents[node->right] = node;
-      q.push(node->right);
+      q.push(new NodeEx(node->right, node));
     }
 
     q.pop();
   }
 
-  for (auto path : leafPaths) {
-    for (auto i : *path) {
-      cout << i->data << " ";
+  string ret;
+  for (auto item : leafs) {
+    auto s = stack<NodeEx*>();
+
+    auto node = item;
+    s.push(node);
+
+    while (node->parent != nullptr) {
+      node = node->parent;
+
+      s.push(node);
     }
-    cout << "# ";
+
+    while (!s.empty()) {
+      cout << s.top()->data << " ";
+      ret += to_string(s.top()->data) + " ";
+      s.pop();
+    }
+
+    cout << "#";
+    ret += "#";
   }
 }
 
@@ -122,7 +165,8 @@ Node* parse(string& target) {
 
 int main(int argc, char* argv[]) {
   auto testcases =
-      vector<string>{"1 2 R 1 3 L", "10 20 L 10 30 R 20 40 L 20 60 R"};
+      vector<string>{"1 2 R 1 3 L", "10 20 L 10 30 R 20 40 L 20 60 R",
+                     "1 2 L 1 3 R 2 4 L 2 5 R 3 6 L 3 7 R"};
 
   for (auto item : testcases) {
     printPaths(parse(item));
