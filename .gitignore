@@ -1,8 +1,10 @@
 #java
 java/bin
+.project
+.settings
 
 #cpp
 cpp/bin
 
-.project
-.settings
+#nodejs
+node_modules

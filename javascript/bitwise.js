@@ -14,9 +14,7 @@ function clearBitsMSBthroughI(num, i) {
   return num & mask;
 }
 
-function insert(M, N, i, j) {
-
-}
-
 console.log(clearBitsMSBthroughI(15, 3).toString(2));
+
+console.log((4 >>> 0).toString(2));
 process.exit(0);
