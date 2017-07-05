@@ -19,91 +19,32 @@ struct Node {
   Node* right;
 };
 
-struct NodeEx : Node {
-  NodeEx* parent;
-
-  NodeEx() {}
-  NodeEx(Node* node, NodeEx* parent)
-      : Node{node->data, node->left, node->right}, parent(parent) {}
-};
-
-struct NodeComp {
-  bool operator()(const NodeEx* lhs, const NodeEx* rhs) const {
-    auto l = (NodeEx*)lhs;
-    auto r = (NodeEx*)rhs;
-    auto preL = (NodeEx*)lhs;
-    auto preR = (NodeEx*)rhs;
-
-    l = l->parent;
-
-    if (l == r) {
-      return preL->data == l->left->data;
-    }
-
-    while (l != nullptr) {
-      while (r != nullptr) {
-        if (l == r) {
-          return preL->data == l->left->data;
-        }
-
-        preR = r;
-        r = r->parent;
-      }
-      preL = l;
-      l = l->parent;
-
-      r = preR = (NodeEx*)rhs;
-    }
-
-    return false;
+void printPathsInner(Node* root, vector<int> path) {
+  if (root == nullptr) {
+    return;
   }
-};
+
+  path.push_back(root->data);
+
+  if (!root->left && !root->right) {
+    for (auto i : path) {
+      cout << i << " ";
+    }
+    cout << "#";
+    return;
+  }
+
+  if (root->left) {
+    printPathsInner(root->left, path);
+  }
+  if (root->right) {
+    printPathsInner(root->right, path);
+  }
+}
 
 void printPaths(Node* root) {
-  auto leafs = set<NodeEx*, NodeComp>();
-
-  auto q = queue<NodeEx*>();
-  q.push(new NodeEx(root, nullptr));
-
-  while (!q.empty()) {
-    auto node = q.front();
-
-    if (!node->left && !node->right) {
-      leafs.insert(node);
-    }
-
-    if (node->left) {
-      q.push(new NodeEx(node->left, node));
-    }
-    if (node->right) {
-      q.push(new NodeEx(node->right, node));
-    }
-
-    q.pop();
-  }
-
-  string ret;
-  for (auto item : leafs) {
-    auto s = stack<NodeEx*>();
-
-    auto node = item;
-    s.push(node);
-
-    while (node->parent != nullptr) {
-      node = node->parent;
-
-      s.push(node);
-    }
-
-    while (!s.empty()) {
-      cout << s.top()->data << " ";
-      ret += to_string(s.top()->data) + " ";
-      s.pop();
-    }
-
-    cout << "#";
-    ret += "#";
-  }
+  printPathsInner(root, vector<int>());
+  cout << endl;
 }
 
 void insert(Node* root, int n1, int n2, char lr) {
