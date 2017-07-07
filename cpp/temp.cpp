@@ -5,29 +5,36 @@
 
 using namespace std;
 
-int getFirstSet(int k) {
-  if (k == 0) {
-    return 0;
-  }
-  if (k == 1) {
-    return 1;
-  }
-
+int firstSetBit(int n) {
   int ret = 1;
-  while (k > 1) {
-    int rest = k % 2;
-    if (rest == 1) {
+  while (n > 0) {
+    if ((n & 1) == 1) {
       return ret;
     }
 
-    k /= 2;
+    n = n >> 1;
     ++ret;
   }
+
+  return 0;
 }
 
-int main() {
-  int* n = nullptr;
-  int* m = nullptr;
+string determine(int n) {
+  if (n == 0) {
+    return "NO";
+  }
 
+  while (n > 0) {
+    if ((n & 1) != 1) {
+      return "NO";
+    };
+
+    n >>= 1;
+  }
+
+  return "YES";
+}
+int main() {
+  cout << 5775 % 11 << endl;
   return 0;
 }
