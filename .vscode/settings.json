@@ -16,6 +16,7 @@
     "deque": "cpp",
     "vector": "cpp",
     "sstream": "cpp",
-    "tuple": "cpp"
+    "tuple": "cpp",
+    "climits": "cpp"
   }
 }
