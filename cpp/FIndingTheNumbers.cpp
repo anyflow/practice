@@ -3,38 +3,34 @@
 #include <cmath>
 #include <iostream>
 #include <set>
+#include <unordered_set>
 #include <vector>
 
 using namespace std;
 
-int flip(int n, int bit) {
-  int mask = 1 << bit;
-
-  return n ^ mask;
-}
-
 void find(vector<int>& nums) {
-  int table = 0;
+  auto vals = unordered_set<int>();
 
   for (int i : nums) {
-    table = flip(table, i);
+    if (vals.find(i) != vals.end()) {
+      vals.erase(i);
+    } else {
+      vals.insert(i);
+    }
   }
 
-  int mask = 1;
-  for (int i = 0; i < 10; ++i) {
-    mask = 1;
-    mask <<= i;
+  auto ret = set<int>(vals.begin(), vals.end());
 
-    if (mask & table) {
-      cout << i << " ";
-    }
+  for (int i : ret) {
+    cout << to_string(i) << " ";
   }
 }
 
 int main() {
-  vector<int> nums = {2, 1, 3, 2};
+  vector<int> nums = {1, 2, 3, 2, 1, 4};
   find(nums);
 
-  // cout << flip(6, 0) << endl;
+  cout << endl;
+
   return 0;
 }

@@ -35,6 +35,6 @@ string determine(int n) {
   return "YES";
 }
 int main() {
-  cout << 5775 % 11 << endl;
+  cout << to_string(1 ^ 2) << endl;
   return 0;
 }
