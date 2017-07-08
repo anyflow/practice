@@ -8,29 +8,24 @@
 
 using namespace std;
 
-void find(vector<int>& nums) {
-  auto vals = unordered_set<int>();
-
-  for (int i : nums) {
-    if (vals.find(i) != vals.end()) {
-      vals.erase(i);
-    } else {
-      vals.insert(i);
-    }
+int find(vector<int>& nums) {
+  int mask = 0;
+  for (auto i : nums) {
+    mask ^= i;
   }
 
-  auto ret = set<int>(vals.begin(), vals.end());
+  int xor = 0;
 
-  for (int i : ret) {
-    cout << to_string(i) << " ";
-  }
+  return mask;
 }
 
 int main() {
-  vector<int> nums = {1, 2, 3, 2, 1, 4};
-  find(nums);
+  vector<int> nums = {468, 335, 501, 170, 725, 479, 359, 963, 465, 706, 146,
+                      282, 828, 962, 492, 996, 943, 828, 437, 392, 605, 943,
+                      468, 335, 501, 170, 725, 479, 359, 963, 465, 706, 146,
+                      282, 828, 962, 492, 996, 943, 828, 437, 392, 605};
 
-  cout << endl;
+  cout << to_string(find(nums)) << endl;
 
   return 0;
 }
