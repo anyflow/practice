@@ -6,19 +6,6 @@
   },
   "files.associations": {
     "*.jsx": "javascript",
-    ".clang-format": "yaml",
-    "map": "cpp",
-    "queue": "cpp",
-    "__locale": "cpp",
-    "string": "cpp",
-    "slist": "cpp",
-    "__split_buffer": "cpp",
-    "deque": "cpp",
-    "vector": "cpp",
-    "sstream": "cpp",
-    "tuple": "cpp",
-    "climits": "cpp",
-    "ostream": "cpp",
-    "iostream": "cpp"
+    ".clang-format": "yaml"
   }
 }
