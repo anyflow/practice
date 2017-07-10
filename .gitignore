@@ -1,10 +1,11 @@
+#common
+bin
+
 #java
-java/bin
 .project
 .settings
 
 #cpp
-cpp/bin
 
 #nodejs
 node_modules

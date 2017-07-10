@@ -5,9 +5,9 @@ class ConnectPairs {
   public static void main(String[] args) {
     String[][] input = new String[][] { {"1", "2"}, {"2", "3"}, {"4", "5"}};
 
-    Temp2 temp2 = new Temp2();
+    ConnectPairs pairs = new ConnectPairs();
 
-    String[] ret = temp2.largestItemAssociation(input);
+    String[] ret = pairs.largestItemAssociation(input);
 
     System.out.println(ret);
   }

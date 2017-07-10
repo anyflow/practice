@@ -6,7 +6,7 @@
       "name": "C++",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceRoot}/cpp/bin/${fileBasenameNoExtension}",
+      "program": "${workspaceRoot}/bin/cpp/${fileBasenameNoExtension}",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceRoot}",
@@ -52,7 +52,7 @@
       ],
       "jdkPath": "/usr/bin",
       "options": [
-        "-classpath", "${workspaceRoot}/java/bin"
+        "-classpath", "${workspaceRoot}/bin/java"
       ]
     },
     {

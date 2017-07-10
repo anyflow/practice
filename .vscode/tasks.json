@@ -8,12 +8,12 @@
     "tasks": [{
             "taskName": "java build",
             "command": "javac",
-            "args": ["-g", "${file}", "-d", "${workspaceRoot}/java/bin/"]
+            "args": ["-g", "${file}", "-d", "${workspaceRoot}/bin/java"]
         },
         {
             "taskName": "C++ build",
             "command": "g++",
-            "args": ["-g", "${workspaceRoot}/cpp/${fileBasename}", "-o", "${workspaceRoot}/cpp/bin/${fileBasenameNoExtension}", "-std=c++14"]
+            "args": ["-g", "${file}", "-o", "${workspaceRoot}/bin/cpp/${fileBasenameNoExtension}", "-std=c++14"]
         }
     ]
 }

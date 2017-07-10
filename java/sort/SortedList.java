@@ -36,7 +36,7 @@ class SortedList {
   }
 
   public static void main(String[] args) {
-    int[] array = new int[] { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 };
+    int[] array = new int[] { 100, 50, 60, 40, 80, 30, 70, 20, 90, 10 };
     SortedList sortedList = new SortedList();
 
     for (Integer i : array) {
