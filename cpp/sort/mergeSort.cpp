@@ -1,5 +1,7 @@
+#include <algorithm>
 #include <chrono>
 #include <climits>
+#include <functional>
 #include <iostream>
 #include <utility>
 #include <vector>
@@ -7,9 +9,55 @@
 using namespace std;
 using namespace std::chrono;
 
-void sort(vector<int>& arr) {
-  for (int i = 0; i < arr.size(); ++i) {
+vector<int> sort(vector<int>& arr, int startIndex, int endIndex) {
+  if (endIndex - startIndex == 0) {
+    return vector<int>();
   }
+  if (endIndex - startIndex == 1) {
+    return vector<int>{arr[startIndex]};
+  }
+
+  int middleIndex = (startIndex + endIndex) / 2;
+
+  auto left = sort(arr, startIndex, middleIndex);
+  auto right = sort(arr, middleIndex, endIndex);
+
+  auto merge = [&]() -> vector<int> {
+    vector<int> ret;
+
+    int i = 0, j = 0;
+
+    while (i < left.size() || j < right.size()) {
+      if (i == left.size()) {
+        ret.insert(ret.end(), right.begin() + j, right.end());
+        break;
+      }
+      if (j == right.size()) {
+        ret.insert(ret.end(), left.begin() + i, left.end());
+        break;
+      }
+
+      if (left[i] > right[j]) {
+        ret.push_back(right[j]);
+        ++j;
+      } else if (left[i] == right[j]) {
+        ret.insert(ret.end(), {left[i], right[j]});
+        ++i;
+        ++j;
+      } else {
+        ret.push_back(left[i]);
+        ++i;
+      }
+    }
+    return ret;
+  };
+
+  return merge();
+}
+
+void sort(vector<int>& arr) {
+  auto ret = sort(arr, 0, arr.size());
+  arr = move(ret);
 }
 
 int main() {
