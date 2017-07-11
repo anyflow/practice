@@ -1,4 +1,5 @@
 #include <chrono>
+#include <climits>
 #include <iostream>
 #include <utility>
 #include <vector>
@@ -6,16 +7,21 @@
 using namespace std;
 using namespace std::chrono;
 
-void sort(vector<int>& arr) {
-  for (int targetPos = 1; targetPos < arr.size(); ++targetPos) {
-    auto target = arr[targetPos];
+int min(vector<int>& arr, int startPos) {
+  int minPos = -1;
 
-    int j = targetPos - 1;
-    while (j >= 0 && arr[j] > target) {
-      arr[j + 1] = arr[j];
-      --j;
+  for (int i = startPos; i < arr.size(); ++i) {
+    if (minPos == -1 || arr[minPos] > arr[i]) {
+      minPos = i;
     }
-    arr[j + 1] = target;
+  }
+
+  return minPos;
+}
+
+void sort(vector<int>& arr) {
+  for (int i = 0; i < arr.size(); ++i) {
+    swap(arr[i], arr[min(arr, i)]);
   }
 }
 
