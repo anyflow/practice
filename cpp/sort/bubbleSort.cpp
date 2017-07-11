@@ -1,8 +1,10 @@
+#include <chrono>
 #include <iostream>
 #include <utility>
 #include <vector>
 
 using namespace std;
+using namespace std::chrono;
 
 void sort(vector<int>& arr) {
   for (int i = 0; i < arr.size(); ++i) {
@@ -15,9 +17,15 @@ void sort(vector<int>& arr) {
 }
 
 int main() {
-  auto input = vector<int>({3, 20, 8, 1, 4, 7, 9, 0, 8, 5});
+  vector<int> input = {3,   1,   5,   9, 0, 10, 5,  32, -1,
+                       -20, 239, 583, 6, 3, 54, 53, 38};
 
+  auto before = system_clock::now();
   sort(input);
+  auto after = system_clock::now();
+
+  auto elapsed = duration_cast<microseconds>(after - before).count();
+  cout << "elapsed time : " << elapsed << endl;
 
   for (auto& i : input) {
     cout << i << " ";
