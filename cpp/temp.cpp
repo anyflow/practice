@@ -1,22 +1,21 @@
 #include <bitset>
 #include <iostream>
+#include <string>
+#include <typeinfo>
+
 using namespace std;
 
+struct Temp {
+  int val = 1;
+};
+
 int main() {
-  unsigned t = 5, bit = 0;
-
-  unsigned ret = 0;
-
-  for (int i = 1; i < 32; ++i) {
-    ret |= t & 1;
-
-    t >>= 1;
-    ret <<= 1;
+  for (auto& i : {1}) {
+    cout << to_string(i) << " | type : " << typeid(i).name() << endl;
   }
 
-  cout << ret << endl;
+  int intVal = 2;
 
-  cout << bitset<32>(ret).to_string() << endl;
-  cout << bitset<4>("1010").to_ulong() << endl;
+  cout << typeid(Temp).name() << endl;
   return 0;
 }
