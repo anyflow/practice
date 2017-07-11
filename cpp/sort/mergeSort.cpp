@@ -9,56 +9,51 @@
 using namespace std;
 using namespace std::chrono;
 
-vector<int> sort(vector<int>& arr, int startIndex, int endIndex) {
-  if (endIndex - startIndex == 0) {
-    return vector<int>();
-  }
-  if (endIndex - startIndex == 1) {
-    return vector<int>{arr[startIndex]};
+void sort(vector<int>& arr, int startIndex, int endIndex) {
+  if (endIndex <= startIndex + 1) {
+    return;
   }
 
-  int middleIndex = (startIndex + endIndex) / 2;
+  int middleIndex = (startIndex + endIndex - 1) / 2;
 
-  auto left = sort(arr, startIndex, middleIndex);
-  auto right = sort(arr, middleIndex, endIndex);
+  sort(arr, startIndex, middleIndex);
+  sort(arr, middleIndex, endIndex);
 
-  auto merge = [&]() -> vector<int> {
+  auto merge = [&]() {
     vector<int> ret;
 
-    int i = 0, j = 0;
+    int i = startIndex, j = middleIndex;
 
-    while (i < left.size() || j < right.size()) {
-      if (i == left.size()) {
-        ret.insert(ret.end(), right.begin() + j, right.end());
+    while (i < middleIndex || j < endIndex) {
+      if (i == middleIndex) {
+        ret.insert(ret.end(), arr.begin() + middleIndex, arr.end() + endIndex);
         break;
       }
-      if (j == right.size()) {
-        ret.insert(ret.end(), left.begin() + i, left.end());
+      if (j == endIndex) {
+        ret.insert(ret.end(), arr.begin() + middleIndex, arr.end() + endIndex);
         break;
       }
 
-      if (left[i] > right[j]) {
-        ret.push_back(right[j]);
+      if (arr[i] > arr[j]) {
+        ret.push_back(arr[j]);
         ++j;
-      } else if (left[i] == right[j]) {
-        ret.insert(ret.end(), {left[i], right[j]});
+      } else if (arr[i] == arr[j]) {
+        ret.insert(ret.end(), {arr[i], arr[j]});
         ++i;
         ++j;
       } else {
-        ret.push_back(left[i]);
+        ret.push_back(arr[i]);
         ++i;
       }
     }
-    return ret;
+
+    copy(ret.begin(), ret.end(), arr.begin() + startIndex);
   };
 
-  return merge();
+  merge();
 }
 
-void sort(vector<int>& arr) {
-  auto ret = sort(arr, 0, arr.size());
-  arr = move(ret);
-}
+void sort(vector<int>& arr) { sort(arr, 0, arr.size()); }
 
 int main() {
   vector<int> input = {
