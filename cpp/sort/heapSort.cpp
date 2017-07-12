@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <chrono>
 #include <climits>
 #include <iostream>
@@ -7,9 +8,34 @@
 using namespace std;
 using namespace std::chrono;
 
+struct Heap {
+  vector<int> items;
+
+  void push(int n) {}
+
+  int pop() {
+    if (items.size() == 0) {
+      return INT_MIN;
+    }
+
+    int ret = items[0];
+
+    swap(ret[0], ret[items.end() - 1]);
+    items.pop_back();
+
+    return ret;
+  }
+};
+
 void sort(vector<int>& arr) {
-  if()
+  Heap heap;
+
+  for (auto& i : arr) {
+    heap.push(i);
+  }
+
   for (int i = 0; i < arr.size(); ++i) {
+    arr[i] = heap.pop();
   }
 }
 
