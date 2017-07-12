@@ -7,10 +7,39 @@
 using namespace std;
 using namespace std::chrono;
 
-void sort(vector<int>& arr) {
-  for (int i = 0; i < arr.size(); ++i) {
+void sort(vector<int>& arr, int startIndex, int endIndex) {
+  if (endIndex - startIndex <= 1) {
+    return;
   }
+
+  int pivotIndex = (startIndex + endIndex) / 2;
+  int pivot = arr[pivotIndex];
+
+  vector<int> left, right, pivots;
+
+  for (int i = startIndex; i < endIndex; ++i) {
+    if (arr[i] == pivot) {
+      pivots.push_back(arr[i]);
+    } else if (arr[i] < pivot) {
+      left.push_back(arr[i]);
+    } else {
+      right.push_back(arr[i]);
+    }
+  }
+
+  pivotIndex =
+      startIndex + left.size() + (pivots.size() > 0 ? pivots.size() - 1 : 0);
+
+  left.insert(left.end(), pivots.begin(), pivots.end());
+  left.insert(left.end(), right.begin(), right.end());
+
+  copy(left.begin(), left.end(), arr.begin() + startIndex);
+
+  sort(arr, startIndex, pivotIndex);
+  sort(arr, pivotIndex, endIndex);
 }
+
+void sort(vector<int>& arr) { sort(arr, 0, arr.size()); }
 
 int main() {
   vector<int> input = {
