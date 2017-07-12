@@ -6,6 +6,8 @@
   },
   "files.associations": {
     "*.jsx": "javascript",
-    ".clang-format": "yaml"
+    ".clang-format": "yaml",
+    "slist": "cpp",
+    "initializer_list": "cpp"
   }
 }

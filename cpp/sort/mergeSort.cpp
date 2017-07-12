@@ -14,7 +14,7 @@ void sort(vector<int>& arr, int startIndex, int endIndex) {
     return;
   }
 
-  int middleIndex = (startIndex + endIndex - 1) / 2;
+  int middleIndex = (startIndex + endIndex) / 2;
 
   sort(arr, startIndex, middleIndex);
   sort(arr, middleIndex, endIndex);
@@ -26,11 +26,11 @@ void sort(vector<int>& arr, int startIndex, int endIndex) {
 
     while (i < middleIndex || j < endIndex) {
       if (i == middleIndex) {
-        ret.insert(ret.end(), arr.begin() + middleIndex, arr.end() + endIndex);
+        ret.insert(ret.end(), arr.begin() + j, arr.begin() + endIndex);
         break;
       }
       if (j == endIndex) {
-        ret.insert(ret.end(), arr.begin() + middleIndex, arr.end() + endIndex);
+        ret.insert(ret.end(), arr.begin() + i, arr.begin() + middleIndex);
         break;
       }
 
