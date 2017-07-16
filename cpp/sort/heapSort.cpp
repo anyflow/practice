@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <chrono>
 #include <climits>
+#include <cmath>
 #include <iostream>
 #include <utility>
 #include <vector>
@@ -11,7 +12,24 @@ using namespace std::chrono;
 struct Heap {
   vector<int> items;
 
-  void push(int n) {}
+  void push(int n) {
+    items.push_back(n);
+
+    swapUp(items.size() - 1);
+  }
+
+  void swapUp(int pos) {
+    if (pos == 0) {
+      return;
+    }
+
+    int pPos = ceil((double)pos / (double)2) - 1;
+
+    if (items[pPos] > items[pos]) {
+      swap(items[pPos], items[pos]);
+      swapUp(pPos);
+    }
+  }
 
   int pop() {
     if (items.size() == 0) {
@@ -20,10 +38,30 @@ struct Heap {
 
     int ret = items[0];
 
-    swap(ret[0], ret[items.end() - 1]);
+    swap(items[0], items[items.size() - 1]);
     items.pop_back();
 
+    swapDown(0);
+
     return ret;
+  }
+
+  void swapDown(int pos) {
+    int lChildPos = (pos * 2) + 1;
+    int rChildPos = lChildPos + 1;
+
+    int minChildPos = -1;
+    if (rChildPos < items.size()) {
+      minChildPos =
+          items[rChildPos] <= items[lChildPos] ? rChildPos : lChildPos;
+    } else if (lChildPos < items.size() && items[lChildPos] < items[pos]) {
+      minChildPos = lChildPos;
+    }
+
+    if (minChildPos != -1) {
+      swap(items[minChildPos], items[pos]);
+      swapDown(minChildPos);
+    }
   }
 };
 
