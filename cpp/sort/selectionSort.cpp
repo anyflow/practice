@@ -1,11 +1,6 @@
-#include <chrono>
-#include <climits>
-#include <iostream>
-#include <utility>
-#include <vector>
+#include "../common/practice.h"
 
 using namespace std;
-using namespace std::chrono;
 
 int min(vector<int>& arr, int startPos) {
   int minPos = -1;
@@ -34,12 +29,11 @@ int main() {
       3,    4,    6,   7443, 221, 4,   3475, 543, 769, 435,  145, 456,
       2463, 8789, 324, 1242, 34,  136, 678,  986, 44,  5463, 234, 789};
 
-  auto before = system_clock::now();
-  sort(input);
-  auto after = system_clock::now();
+  auto stopwatch = Stopwatch();
 
-  auto elapsed = duration_cast<microseconds>(after - before).count();
-  cout << "elapsed time : " << elapsed << endl;
+  sort(input);
+
+  stopwatch.printElapsed();
 
   for (auto& i : input) {
     cout << i << " ";

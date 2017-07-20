@@ -1,13 +1,6 @@
-#include <algorithm>
-#include <chrono>
-#include <climits>
-#include <functional>
-#include <iostream>
-#include <utility>
-#include <vector>
+#include "../common/practice.h"
 
 using namespace std;
-using namespace std::chrono;
 
 void sort(vector<int>& arr, int startIndex, int endIndex) {
   if (endIndex <= startIndex + 1) {
@@ -64,12 +57,11 @@ int main() {
       3,    4,    6,   7443, 221, 4,   3475, 543, 769, 435,  145, 456,
       2463, 8789, 324, 1242, 34,  136, 678,  986, 44,  5463, 234, 789};
 
-  auto before = system_clock::now();
-  sort(input);
-  auto after = system_clock::now();
+  auto stopwatch = Stopwatch();
 
-  auto elapsed = duration_cast<microseconds>(after - before).count();
-  cout << "elapsed time : " << elapsed << endl;
+  sort(input);
+
+  stopwatch.printElapsed();
 
   for (auto& i : input) {
     cout << i << " ";

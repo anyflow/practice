@@ -8,6 +8,10 @@
     "*.jsx": "javascript",
     ".clang-format": "yaml",
     "slist": "cpp",
-    "initializer_list": "cpp"
-  }
+    "initializer_list": "cpp",
+    "chrono": "cpp",
+    "algorithm": "cpp",
+    "set": "cpp"
+  },
+  "C_Cpp.intelliSenseEngine": "Default"
 }
