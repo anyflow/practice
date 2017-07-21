@@ -4,20 +4,21 @@
 #include <chrono>
 #include <iostream>
 
-using namespace std;
-using namespace std::chrono;
+class Stopwatch {
+private:
+  std::chrono::system_clock::time_point startTime;
 
-struct Stopwatch {
-  system_clock::time_point startTime;
-
-  Stopwatch() : startTime(system_clock::now()) {}
+public:
+  Stopwatch() : startTime(std::chrono::system_clock::now()) {}
 
   size_t elapsed() {
-    return duration_cast<microseconds>(system_clock::now() - startTime).count();
+    return std::chrono::duration_cast<std::chrono::microseconds>(
+               std::chrono::system_clock::now() - startTime)
+        .count();
   }
 
   void printElapsed() {
-    cout << "elapsed time : " << elapsed() << "ms" << endl;
+    std::cout << "elapsed time : " << elapsed() << "ms" << std::endl;
   }
 };
 

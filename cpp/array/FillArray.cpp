@@ -1,7 +1,4 @@
-#include <algorithm>
-#include <cmath>
-#include <iostream>
-#include <string>
+#include "../common/practice.h"
 
 using namespace std;
 

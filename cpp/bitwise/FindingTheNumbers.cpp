@@ -1,10 +1,6 @@
 // http://practice.geeksforgeeks.org/problems/finding-the-numbers/0
 
-#include <cmath>
-#include <iostream>
-#include <set>
-#include <unordered_set>
-#include <vector>
+#include "../common/practice.h"
 
 using namespace std;
 
@@ -13,8 +9,6 @@ int find(vector<int>& nums) {
   for (auto i : nums) {
     mask ^= i;
   }
-
-  int xor = 0;
 
   return mask;
 }

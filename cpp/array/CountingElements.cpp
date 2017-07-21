@@ -1,10 +1,6 @@
-// question :
 // http://practice.geeksforgeeks.org/problems/counting-elements-in-two-arrays/1
 
-#include <algorithm>
-#include <iostream>
-#include <map>
-#include <vector>
+#include "../common/practice.h"
 
 using namespace std;
 

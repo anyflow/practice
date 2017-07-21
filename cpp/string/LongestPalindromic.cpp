@@ -1,14 +1,8 @@
-#include <cmath>
-#include <deque>
-#include <iostream>
-#include <map>
-#include <set>
-#include <string>
+// http://practice.geeksforgeeks.org/problems/longest-palindromic-subsequence/0
+
+#include "../common/practice.h"
 
 using namespace std;
-
-// question :
-// http://practice.geeksforgeeks.org/problems/longest-palindromic-subsequence/0
 
 string reverse(string in) {
   string ret;

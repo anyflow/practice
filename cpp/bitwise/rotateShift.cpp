@@ -1,6 +1,4 @@
-#include <bitset>
-#include <climits>
-#include <iostream>
+#include "../common/practice.h"
 
 using namespace std;
 

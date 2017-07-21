@@ -1,9 +1,6 @@
-// question :
 // http://practice.geeksforgeeks.org/problems/longest-distinct-characters-in-string/0
 
-#include <iostream>
-#include <map>
-#include <string>
+#include "../common/practice.h"
 
 using namespace std;
 

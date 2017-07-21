@@ -1,8 +1,5 @@
-#include <iostream>
-#include <set>
-#include <vector>
+#include "../common/practice.h"
 
-// question :
 using namespace std;
 
 int get(vector<int> arr) {}

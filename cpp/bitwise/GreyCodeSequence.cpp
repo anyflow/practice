@@ -1,8 +1,6 @@
 // http://practice.geeksforgeeks.org/problems/generate-grey-code-sequences/1
 
-#include <algorithm>
-#include <string>
-#include <vector>
+#include "../common/practice.h"
 
 using namespace std;
 

@@ -1,8 +1,6 @@
 // http://practice.geeksforgeeks.org/problems/xor-play/0
 
-#include <cmath>
-#include <iostream>
-#include <set>
+#include "../common/practice.h"
 
 using namespace std;
 
