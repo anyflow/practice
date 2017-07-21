@@ -1,6 +1,5 @@
 {
-    "configurations": [
-        {
+    "configurations": [{
             "name": "Mac",
             "includePath": [
                 "${workspaceRoot}",
@@ -29,6 +28,9 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceRoot}",
+                "/usr/include/c++/4.9",
+                "/usr/include/x86_64-linux-gnu/c++/4.9",
+                "/usr/lib/gcc/x86_64-linux-gnu/4.9/include",
                 "/usr/include",
                 "/usr/local/include"
             ],

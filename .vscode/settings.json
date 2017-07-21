@@ -11,7 +11,8 @@
     "initializer_list": "cpp",
     "chrono": "cpp",
     "algorithm": "cpp",
-    "set": "cpp"
+    "set": "cpp",
+    "unordered_map": "cpp"
   },
   "C_Cpp.intelliSenseEngine": "Default"
 }
