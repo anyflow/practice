@@ -6,14 +6,12 @@
     "showOutput": "always",
     "suppressTaskName": true,
     "tasks": [{
-            "taskName": "java build",
-            "command": "javac",
-            "args": ["-g", "${file}", "-d", "${workspaceRoot}/bin/java"]
-        },
-        {
-            "taskName": "C++ build",
-            "command": "g++",
-            "args": ["-g", "${file}", "-o", "${workspaceRoot}/bin/cpp/${fileBasenameNoExtension}", "-std=c++14"]
-        }
-    ]
+        "taskName": "C++ build",
+        "command": "g++",
+        "args": ["-g", "${file}", "-o", "${workspaceRoot}/bin/cpp/${fileBasenameNoExtension}", "-std=c++14"]
+    }, {
+        "taskName": "java build",
+        "command": "javac",
+        "args": ["-g", "${file}", "-d", "${workspaceRoot}/bin/java"]
+    }]
 }

@@ -1,21 +1,6 @@
 {
   "version": "0.2.0",
-  "configurations": [{
-      "name": "Python",
-      "type": "python",
-      "request": "launch",
-      "stopOnEntry": true,
-      "pythonPath": "${config:python.pythonPath}",
-      "program": "${file}",
-      "cwd": "${workspaceRoot}",
-      "env": {},
-      "envFile": "${workspaceRoot}/.env",
-      "debugOptions": [
-        "WaitOnAbnormalExit",
-        "WaitOnNormalExit",
-        "RedirectOutput"
-      ]
-    },
+  "configurations": [
     {
       "name": "C++",
       "type": "cppdbg",
@@ -25,7 +10,7 @@
       "stopAtEntry": false,
       "cwd": "${workspaceRoot}",
       "environment": [],
-      "externalConsole": false,
+      "externalConsole": true,
       "logging": {
         "programOutput": true
       },
@@ -65,8 +50,8 @@
         "${workspaceRoot}/java"
       ],
       "jdkPath": "/usr/bin",
-      "options": [
-        "-classpath", "${workspaceRoot}/bin/java"
+      "classpath": [
+        "${workspaceRoot}/bin/java"
       ]
     },
     {
@@ -76,6 +61,22 @@
       "program": "${file}",
       "cwd": "${workspaceRoot}/javascript",
       "env": {}
+    },
+    {
+      "name": "Python",
+      "type": "python",
+      "request": "launch",
+      "stopOnEntry": true,
+      "pythonPath": "${config:python.pythonPath}",
+      "program": "${file}",
+      "cwd": "${workspaceRoot}",
+      "env": {},
+      "envFile": "${workspaceRoot}/.env",
+      "debugOptions": [
+        "WaitOnAbnormalExit",
+        "WaitOnNormalExit",
+        "RedirectOutput"
+      ]
     }
   ]
 }
