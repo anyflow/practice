@@ -1,6 +1,9 @@
 #common
 bin
 
+#python
+**/*.pyc
+
 #java
 .project
 .settings
