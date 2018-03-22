@@ -1,0 +1,30 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Person	../python/playground.py	/^class Person(object):$/;"	kind:class	line:50
+SuperHero	../python/playground.py	/^class SuperHero(Person):$/;"	kind:class	line:69
+__init__	../python/playground.py	/^    def __init__(self, first, last):$/;"	kind:member	line:51
+__init__	../python/playground.py	/^    def __init__(self, first, last, nick):$/;"	kind:member	line:72
+__init__.py	../python/__init__.py	1;"	kind:file	line:1
+__init__.py	../python/device_id/__init__.py	1;"	kind:file	line:1
+__str__	../python/playground.py	/^    def __str__(self):$/;"	kind:member	line:58
+a_function	../python/playground.py	/^def a_function(arg1, arg2="default", *args, **kwargs):$/;"	kind:function	line:13
+device_id	../python/playground.py	/^import device_id.temp as tempControl$/;"	kind:namespace	line:1
+full_name	../python/playground.py	/^    def full_name(self):$/;"	kind:member	line:55
+kwargs	../python/playground.py	/^kwargs = {'a': 1, 'b': 2, 'c': 3}$/;"	kind:variable	line:43
+math	../python/playground.py	/^import math$/;"	kind:namespace	line:2
+multiReturn	../python/playground.py	/^def multiReturn():$/;"	kind:function	line:26
+nick_name	../python/playground.py	/^    def nick_name(self):$/;"	kind:member	line:76
+numbers	../python/playground.py	/^numbers = [0, 1, 2, 'three', 4, 5, 6, 7, 8, 9]$/;"	kind:variable	line:4
+p	../python/playground.py	/^p = SuperHero('Hyunjeong', 'Park', 'anyflow')$/;"	kind:variable	line:80
+person	../python/playground.py	/^person = Person('Hyunjeong', 'Park')$/;"	kind:variable	line:62
+playground.py	../python/playground.py	1;"	kind:file	line:1
+printTemp	../python/device_id/temp.py	/^def printTemp():$/;"	kind:function	line:1
+printTemp	../python/test/test.py	/^from python.device_id.temp import printTemp$/;"	kind:namespace	line:1
+temp.py	../python/device_id/temp.py	1;"	kind:file	line:1
+tempControl	../python/playground.py	/^import device_id.temp as tempControl$/;"	kind:namespace	line:1
+ternary	../python/playground.py	/^def ternary(a, b, c):$/;"	kind:function	line:39
+test.py	../python/test/test.py	1;"	kind:file	line:1
