@@ -9,7 +9,7 @@
       "stopAtEntry": false,
       "cwd": "${workspaceRoot}",
       "environment": [],
-      "externalConsole": false,
+      "externalConsole": true,
       "logging": {
         "programOutput": true,
         "trace": true

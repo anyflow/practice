@@ -34,7 +34,8 @@
     "ratio": "cpp",
     "type_traits": "cpp",
     "typeinfo": "cpp",
-    "utility": "cpp"
+    "utility": "cpp",
+    "vector": "cpp"
   },
   "C_Cpp.intelliSenseEngine": "Default"
 }

@@ -1,4 +1,4 @@
-// https://practice.geeksforgeeks.org/problems/replace-all-0-with-5-in-an-input-integer/1
+// https://practice.geeksforgeeks.org/problems/number-of-occurrence/0
 
 #include "../common/practice.h"
 
