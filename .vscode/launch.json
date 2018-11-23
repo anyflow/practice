@@ -1,7 +1,6 @@
 {
   "version": "0.2.0",
-  "configurations": [
-    {
+  "configurations": [{
       "name": "C++",
       "type": "cppdbg",
       "request": "launch",
@@ -10,10 +9,12 @@
       "stopAtEntry": false,
       "cwd": "${workspaceRoot}",
       "environment": [],
-      "externalConsole": true,
+      "externalConsole": false,
       "logging": {
-        "programOutput": true
+        "programOutput": true,
+        "trace": true
       },
+      "launchCompleteCommand": "exec-run",
       "linux": {
         "MIMode": "gdb",
         "setupCommands": [{
