@@ -14,6 +14,7 @@
         "programOutput": true,
         "trace": true
       },
+      "preLaunchTask": "C++ build",
       "launchCompleteCommand": "exec-run",
       "linux": {
         "MIMode": "gdb",

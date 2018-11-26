@@ -46,6 +46,8 @@ void countEleLessThanOrEqual(int arr1[], int arr2[], int m, int n) {
   for (int i = 0; i < m; ++i) {
     cout << A[arr1[i]] << " ";
   }
+
+  cout << endl;
 }
 
 int main() {
