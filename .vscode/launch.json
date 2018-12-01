@@ -10,26 +10,18 @@
       "cwd": "${workspaceRoot}",
       "environment": [],
       "externalConsole": true,
-      "logging": {
-        "programOutput": true,
-        "trace": true
-      },
       "preLaunchTask": "C++ build",
       "launchCompleteCommand": "exec-run",
+      "osx": {
+        "MIMode": "lldb",
+        "miDebuggerPath": "/Applications/Xcode.app/Contents/Developer/usr/bin/lldb-mi"
+      },
       "linux": {
         "MIMode": "gdb",
         "setupCommands": [{
           "description": "Enable pretty-printing for gdb",
           "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        }]
-      },
-      "osx": {
-        "MIMode": "lldb",
-        "setupCommands": [{
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
+          "ignoreFailures": true,
         }]
       },
       "windows": {

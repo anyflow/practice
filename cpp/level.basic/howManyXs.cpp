@@ -5,13 +5,21 @@
 using namespace std;
 
 int findX(int num, int lower, int upper) {
-  cout << num << lower << upper << endl;
+  int ret = 0;
 
-  return 0;
+  for (auto i = lower + 1; i < upper; ++i) {
+    for (auto c : to_string(i)) {
+      if (num == c - 48) {
+        ++ret;
+      }
+    }
+  }
+
+  return ret;
 }
 
 int main() {
-  int T;
+  int T = 1;
   auto results = vector<int>();
 
   cin >> T;
@@ -22,6 +30,10 @@ int main() {
     cin >> num >> lower >> upper;
 
     results.push_back(findX(num, lower, upper));
+  }
+
+  for (auto item : results) {
+    cout << item << endl;
   }
 
   return 0;
