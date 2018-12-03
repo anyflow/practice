@@ -1,6 +1,7 @@
 // https://practice.geeksforgeeks.org/problems/find-k-th-character-in-string/0
 
-// TODO correct answer but time out occurred!
+// 풀지 못함. editorial도 아래와 같은 brute-force를 논하는데, 항시 timeout으로
+// pass 못함. editorial 대로 vector 대신 string으로도 해보았으나 실패.
 
 #include "../lib/practice.h"
 
@@ -51,7 +52,11 @@ int main() {
   int k = 6;
   int n = 4;
 
+  auto stopwatch = Stopwatch();
+
   auto bits = updated(m, n);
+
+  stopwatch.printElapsed();
 
   cout << bits[k] << endl;
 
