@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
                         "10 L 10 3 R 2 5 L 2 10 R 3 1 L 3 10 R"};
 
   for (auto item : testcases) {
-    string ret = printCorner(TreeFactory::create(item));
+    string ret = printCorner(Tree::create(item));
     cout << endl;
   }
 

@@ -29,8 +29,8 @@ int main(int argc, char* argv[]) {
   //   auto tree1 = parse(string("1 2 L 1 3 R 2 4 L"));
   //   auto tree2 = parse(string("1 3 L 1 2 R 2 4 R"));
 
-  auto tree1 = TreeFactory::create(string("0 1 L 0 2 R"));
-  auto tree2 = TreeFactory::create(string("0 1 L 0 2 R"));
+  auto tree1 = Tree::create(string("0 1 L 0 2 R"));
+  auto tree2 = Tree::create(string("0 1 L 0 2 R"));
 
   string ret = isIsomorphic(tree1, tree2) ? "YES" : "NO";
   cout << ret << endl;

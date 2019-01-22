@@ -34,29 +34,6 @@
       }
     },
     {
-      "name": "Java",
-      "type": "java",
-      "request": "launch",
-      "stopOnEntry": true,
-      "cwd": "${fileDirname}",
-      "startupClass": "${fileBasename}",
-      "sourcePath": [
-        "${workspaceRoot}/java"
-      ],
-      "jdkPath": "/usr/bin",
-      "classpath": [
-        "${workspaceRoot}/bin/java"
-      ]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "javascript",
-      "program": "${file}",
-      "cwd": "${workspaceRoot}/javascript",
-      "env": {}
-    },
-    {
       "name": "Python",
       "type": "python",
       "request": "launch",
@@ -71,6 +48,20 @@
         "WaitOnNormalExit",
         "RedirectOutput"
       ]
+    },
+    {
+      "type": "java",
+      "name": "Java",
+      "request": "launch",
+      "mainClass": "${file}"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "javascript",
+      "program": "${file}",
+      "cwd": "${workspaceRoot}/javascript",
+      "env": {}
     }
   ]
 }

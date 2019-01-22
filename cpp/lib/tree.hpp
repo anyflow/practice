@@ -11,7 +11,7 @@ struct Node {
   Node* right;
 };
 
-class TreeFactory {
+class Tree {
 public:
   static Node* create(std::string treeNotation) {
     using namespace std;
@@ -54,6 +54,11 @@ public:
     return root;
   };
 
+  static void printPaths(Node* root) {
+    printPathsInner(root, std::vector<int>());
+    std::cout << std::endl;
+  }
+
 private:
   static void insert(Node* root, int n1, int n2, char lr) {
     if (root == NULL)
@@ -72,6 +77,29 @@ private:
       insert(root->right, n1, n2, lr);
     }
   };
+
+  static void printPathsInner(Node* root, std::vector<int> path) {
+    if (root == nullptr) {
+      return;
+    }
+
+    path.push_back(root->data);
+
+    if (!root->left && !root->right) {
+      for (auto i : path) {
+        std::cout << i << " ";
+      }
+      std::cout << "#";
+      return;
+    }
+
+    if (root->left) {
+      printPathsInner(root->left, path);
+    }
+    if (root->right) {
+      printPathsInner(root->right, path);
+    }
+  }
 };
 
 #endif // TREE_HPP

@@ -40,11 +40,16 @@ Node* convertToDLL(Node* root, Node** head_ref) {
 }
 
 int main(int argc, char* argv[]) {
-  auto tree = TreeFactory::create(string("1 2 L 1 3 R 2 4 L"));
+  auto tree = Tree::create("1 2 L 1 3 R 2 4 L");
 
   Node* dll = new Node{0, nullptr, nullptr};
 
   auto last = convertToDLL(tree, &dll);
+
+  cout << "data : " << last->data << endl
+       << "left : " << last->left->data << endl
+       << "right : " << (last->right ? to_string(last->right->data) : "null")
+       << endl;
 
   return 0;
 }

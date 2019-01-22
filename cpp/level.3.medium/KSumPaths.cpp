@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
 
   for (auto item : testcases) {
     cout << "k=" << item.first << "|tree:" << item.second << endl;
-    cout << printCount(TreeFactory::create(item.second), item.first) << endl;
+    cout << printCount(Tree::create(item.second), item.first) << endl;
   }
 
   return 0;
