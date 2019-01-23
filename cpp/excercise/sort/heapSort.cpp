@@ -1,6 +1,7 @@
-#include "../lib/practice.h"
+#include "../../lib/practice.h"
 
 using namespace std;
+using namespace anyflow;
 
 struct Heap {
   vector<int> items;

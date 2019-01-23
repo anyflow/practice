@@ -3,6 +3,7 @@
 #include "../lib/practice.h"
 
 using namespace std;
+using namespace anyflow;
 
 void printCornerInner(vector<Node*>& nodes, string& ret) {
   if (nodes.size() <= 0) {

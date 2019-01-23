@@ -1,6 +1,7 @@
-#include "../lib/practice.h"
+#include "../../lib/practice.h"
 
 using namespace std;
+using namespace anyflow;
 
 int min(vector<int>& arr, int startPos) {
   int minPos = -1;

@@ -4,6 +4,7 @@
 #include "stdc++.h"
 
 #include "./Stopwatch.hpp"
-#include "./tree.hpp"
+#include "./Tree.hpp"
+#include "./util.hpp"
 
 #endif // PRACTICE_H

@@ -6,6 +6,7 @@
 #include "../lib/practice.h"
 
 using namespace std;
+using namespace anyflow;
 
 vector<bool> iterate(vector<bool>& items) {
   auto ret = vector<bool>();
@@ -62,23 +63,3 @@ int main() {
 
   return 0;
 }
-
-// int main() {
-//   int T;
-//   cin >> T;
-
-//   auto rets = vector<bool>();
-
-//   while (T--) {
-//     int m, k, n;
-//     cin >> m >> k >> n;
-
-//     auto bits = updated(m, n);
-
-//     rets.push_back(bits[k]);
-//   }
-
-//   for (auto ret : rets) {
-//     cout << ret << endl;
-//   }
-// }

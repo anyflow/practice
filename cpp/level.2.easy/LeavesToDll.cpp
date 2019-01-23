@@ -4,6 +4,7 @@
 #include "../lib/practice.h"
 
 using namespace std;
+using namespace anyflow;
 
 Node* last = nullptr;
 

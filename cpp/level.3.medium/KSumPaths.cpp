@@ -3,6 +3,7 @@
 #include "../lib/practice.h"
 
 using namespace std;
+using namespace anyflow;
 
 using Path = vector<Node*>;
 

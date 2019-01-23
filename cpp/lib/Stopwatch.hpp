@@ -4,6 +4,8 @@
 #include <chrono>
 #include <iostream>
 
+namespace anyflow {
+
 class Stopwatch {
 private:
   std::chrono::system_clock::time_point startTime;
@@ -21,5 +23,7 @@ public:
     std::cout << "elapsed time : " << elapsed() << "ms" << std::endl;
   }
 };
+
+} // namespace anyflow
 
 #endif // STOPWATCH_HPP

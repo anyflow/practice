@@ -3,6 +3,7 @@
 #include "../lib/practice.h"
 
 using namespace std;
+using namespace anyflow;
 
 bool isIsomorphic(Node* root1, Node* root2) {
   if (root1 == nullptr && root2 == nullptr) {

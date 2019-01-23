@@ -3,6 +3,7 @@
 #include "../lib/practice.h"
 
 using namespace std;
+using namespace anyflow;
 
 int main(int argc, char* argv[]) {
   auto testcases =
