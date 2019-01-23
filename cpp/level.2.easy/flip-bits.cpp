@@ -1,26 +1,30 @@
 // https://practice.geeksforgeeks.org/problems/flip-bits/0
+// FAILED
 
 #include "../lib/practice.h"
 
 using namespace std;
+using namespace anyflow;
 
 int flipCount(vector<int>& arr) {
+  int val;
   int count1 = 0;
+  int currentMax = 0;
+  int maxDiff = 0;
 
-  return 0;
-}
+  for (int i = 0; i < arr.size(); ++i) {
+    val = arr[i];
+    if (val == 1) {
+      ++count1;
+    }
 
-vector<int> string2vector(string input) {
-  vector<int> ret;
+    val = val == 1 ? -1 : 1;
 
-  stringstream stream(input);
-  string temp;
-
-  while (getline(stream, temp, ' ')) {
-    ret.push_back(std::stoi(temp));
+    currentMax = std::max(val, currentMax + val);
+    maxDiff = std::max(maxDiff, currentMax);
   }
 
-  return ret;
+  return count1 + std::max(0, maxDiff);
 }
 
 int main(int argc, char* argv[]) {
@@ -45,9 +49,7 @@ int main(int argc, char* argv[]) {
   //   cout << flipCount(arr) << endl;
   // }
 
-  // auto arr = vector<int>{0, 1, 1, 1, 1, 0, 0, 0};
-
-  auto arr = string2vector("");
+  auto arr = anyflow::string2vector("0 1 1 1 1 0 0 0");
 
   cout << flipCount(arr) << endl;
 
