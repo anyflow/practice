@@ -42,6 +42,7 @@
     "bitset": "cpp",
     "ostream": "cpp",
     "iostream": "cpp",
-    "__nullptr": "cpp"
+    "__nullptr": "cpp",
+    "climits": "cpp"
   }
 }
