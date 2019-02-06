@@ -49,7 +49,7 @@ int main() {
       "648 150 932 670 876 599 450 437 600 124 444 732 155 862 435 386 968";
   auto t3 = "706 627 813 376 94";
 
-  auto arr = string2vector(t3);
+  auto arr = string2vector<int>(t3);
 
   cout << max_of(arr) << endl;
 }

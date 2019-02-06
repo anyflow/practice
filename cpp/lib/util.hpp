@@ -8,8 +8,8 @@
 
 namespace anyflow {
 
-std::vector<int> string2vector(std::string input) {
-  std::vector<int> ret;
+template <class _T> std::vector<_T> string2vector(std::string input) {
+  std::vector<_T> ret;
 
   std::stringstream stream(input);
   std::string temp;

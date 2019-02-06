@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
   //   cout << flipCount(arr) << endl;
   // }
 
-  auto arr = anyflow::string2vector("0 1 1 1 1 0 0 0");
+  auto arr = anyflow::string2vector<int>("0 1 1 1 1 0 0 0");
 
   cout << flipCount(arr) << endl;
 
