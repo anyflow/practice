@@ -2,7 +2,6 @@
 // Brute Force(O(n2))로 풀었으나, 아래는 정답임(O(n))
 
 #include "../lib/practice.h"
-#include <climits>
 using namespace std;
 using namespace anyflow;
 
