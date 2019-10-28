@@ -1,6 +1,16 @@
 {
   "version": "0.2.0",
   "configurations": [{
+      "name":"C++ codelldb",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceRoot}/bin/cpp/${fileBasenameNoExtension}",
+      "args": [],
+      "stopOnEntry": false,
+      "cwd": "${workspaceRoot}",
+      "preLaunchTask": "C++ build"
+    },
+    {
       "name": "C++",
       "type": "cppdbg",
       "request": "launch",
