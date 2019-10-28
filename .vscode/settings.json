@@ -48,5 +48,6 @@
     "iostream": "cpp",
     "__nullptr": "cpp",
     "climits": "cpp"
-  }
+  },
+  "C_Cpp.errorSquiggles": "Disabled"
 }
