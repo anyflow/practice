@@ -2,9 +2,9 @@
 
 using namespace std;
 
-template <typename InputItr, typename OutputItr, typename Functor>
+template <typename InputItr, typename OutputItr, typename Predicate>
 OutputItr xcopy_if(InputItr begin, InputItr end, OutputItr result,
-                   Functor predicate) {
+                   Predicate predicate) {
   for (; begin != end; ++begin) {
     if (!predicate(*begin)) {
       continue;
