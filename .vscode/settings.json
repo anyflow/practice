@@ -1,5 +1,6 @@
 // Place your settings in this file to overwrite default and user settings.
 {
+  "python.pythonPath": "/Users/anyflow/virtualenv/ml/bin/python3.7",
   "files.exclude": {
     "**/.git": true,
     "**/.DS_Store": true,
@@ -47,7 +48,8 @@
     "ostream": "cpp",
     "iostream": "cpp",
     "__nullptr": "cpp",
-    "climits": "cpp"
+    "climits": "cpp",
+    "iterator": "cpp"
   },
   "C_Cpp.errorSquiggles": "Disabled"
 }
