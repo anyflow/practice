@@ -49,7 +49,8 @@
     "iostream": "cpp",
     "__nullptr": "cpp",
     "climits": "cpp",
-    "iterator": "cpp"
+    "iterator": "cpp",
+    "istream": "cpp"
   },
   "C_Cpp.default.cppStandard": "c++17",
   "C_Cpp.default.cStandard": "c11",
