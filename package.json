@@ -5,6 +5,8 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
+    "mathjs": "^6.5.0",
+    "xlsx": "^0.15.4"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
