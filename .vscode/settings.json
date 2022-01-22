@@ -1,6 +1,6 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-  "python.pythonPath": "/Users/anyflow/virtualenv/practice/bin/python3.7",
+  "python.pythonPath": "/Users/anyflow/virtualenv/practice/bin/python3.9",
   "files.exclude": {
     "**/.git": true,
     "**/.DS_Store": true,
