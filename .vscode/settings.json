@@ -1,6 +1,13 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-  "python.pythonPath": "/Users/anyflow/virtualenv/practice/bin/python3.9",
+  "python.defaultInterpreterPath": "/Users/anyflow/virtualenv/practice/bin/python3.9",
+  "python.formatting.provider": "black",
+  "python.linting.flake8Enabled": true,
+  "python.linting.enabled": true,
+  "C_Cpp.default.cppStandard": "c++17",
+  "C_Cpp.default.cStandard": "c11",
+  "C_Cpp.default.intelliSenseMode": "clang-x64",
+  "C_Cpp.errorSquiggles": "Enabled",
   "files.exclude": {
     "**/.git": true,
     "**/.DS_Store": true,
@@ -102,10 +109,4 @@
     "unordered_set": "cpp",
     "valarray": "cpp"
   },
-  "C_Cpp.default.cppStandard": "c++17",
-  "C_Cpp.default.cStandard": "c11",
-  "C_Cpp.default.intelliSenseMode": "clang-x64",
-  "C_Cpp.errorSquiggles": "Enabled",
-  "editor.wordWrapColumn": 120,
-  "editor.wordWrap": "off"
 }
