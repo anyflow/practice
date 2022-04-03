@@ -1,0 +1,49 @@
+apiVersion: kind.x-k8s.io/v1alpha4
+kind: Cluster
+# name: anyflow-cluster
+
+networking:
+  podSubnet: 10.244.0.0/16
+  serviceSubnet: 10.96.0.0/12
+  disableDefaultCNI: false
+  kubeProxyMode: iptables # none / iptables(default) / ipvs
+
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+
+  # port forward 80 on the host to 80 on this node
+  # optional: set the bind address on the host
+  # 0.0.0.0 is the current default
+  # listenAddress: "127.0.0.1"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+
+  - containerPort: 5678
+    hostPort: 5678
+    protocol: TCP
+
+  # add a mount from /path/to/my/files on the host to /files on the node
+  # extraMounts:
+  # - hostPath: /Users/anyflow/workspace/practice/k8s
+  #   containerPath: /host_practice_k8s
+  #   # optional: if set, the mount is read-only.
+  #   # default false
+  #   readOnly: false
+  #   # optional: if set, the mount needs SELinux relabeling.
+  #   # default false
+  #   selinuxRelabel: false
+  #   # optional: set propagation mode (None, HostToContainer or Bidirectional)
+  #   # see https://kubernetes.io/docs/concepts/storage/volumes/#mount-propagation
+  #   # default None
+  #   propagation: HostToContainer
+
+- role: worker
+- role: worker
