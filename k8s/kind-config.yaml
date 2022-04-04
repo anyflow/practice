@@ -22,12 +22,11 @@ nodes:
   # 0.0.0.0 is the current default
   # listenAddress: "127.0.0.1"
   extraPortMappings:
-  - containerPort: 80
+  - containerPort: 80  #for ingress
     hostPort: 80
     protocol: TCP
-
-  - containerPort: 5678
-    hostPort: 5678
+  - containerPort: 31593 # for LoadBalancer
+    hostPort: 31593
     protocol: TCP
 
   # add a mount from /path/to/my/files on the host to /files on the node

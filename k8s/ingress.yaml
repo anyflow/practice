@@ -19,4 +19,4 @@ spec:
           service:
             name: bar-service
             port:
-              number: 6000
+              number: 5000

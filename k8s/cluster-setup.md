@@ -1,11 +1,11 @@
 
 
-# Cluster operations with ingress NGINX
+# Cluster operations with ingress NGINX and Load Balancer Metallb
 
 ## Create a cluster
 ```bash
 # Create cluster of this config
-> kind create cluster --config ./kind-ingress.yaml
+> kind create cluster --config ./kind-config.yaml
 
 # Install ingree NGINX
 > kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml

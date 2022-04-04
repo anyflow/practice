@@ -1,0 +1,32 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: http-echo-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: http-echo
+  ports:
+  - port: 5678
+    targetPort: 5000
+    nodePort: 31593
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: foo-service
+spec:
+  selector:
+    appArgs: foo
+  ports:
+  - port: 5000
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: bar-service
+spec:
+  selector:
+    appArgs: bar
+  ports:
+  - port: 5000
