@@ -7,9 +7,9 @@ spec:
   selector:
     app: http-echo
   ports:
-  - port: 5678
-    targetPort: 5000
-    nodePort: 31593
+  - port: 5678 # Load balaner가 외부에 노출하는 port (Linux에서만 유효)
+    targetPort: 5000 # pod 내 container가 실제 사용하는 port와 일치해야 함
+    nodePort: 31593 # macOS, Windows를 위해 대안으로 사용. kind-config.yaml의 nodes.extraPortMappings.containerPort와 일치해야 함.
 ---
 kind: Service
 apiVersion: v1
@@ -19,7 +19,7 @@ spec:
   selector:
     appArgs: foo
   ports:
-  - port: 5000
+  - port: 5000 # pod 내 container가 실제 사용하는 port와 일치해야 함
 ---
 kind: Service
 apiVersion: v1
@@ -29,4 +29,4 @@ spec:
   selector:
     appArgs: bar
   ports:
-  - port: 5000
+  - port: 5000 # pod 내 container가 실제 사용하는 port와 일치해야 함
