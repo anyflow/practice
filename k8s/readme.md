@@ -107,9 +107,10 @@ Not sure what to do next? 😅  Check out https://kind.sigs.k8s.io/docs/user/qui
  > kubectl get nodes
 ...
 NAME                 STATUS   ROLES                  AGE   VERSION
-kind-control-plane   Ready    control-plane,master   28m   v1.21.1
-kind-worker          Ready    <none>                 28m   v1.21.1
-kind-worker2         Ready    <none>                 28m   v1.21.1
+kind-control-plane   Ready    control-plane,master   18m   v1.21.1
+kind-worker          Ready    <none>                 18m   v1.21.1
+kind-worker2         Ready    <none>                 18m   v1.21.1
+kind-worker3         Ready    <none>                 18m   v1.21.1
 ```
 
 ## NGINX (ingress controller) 설치하기
@@ -228,10 +229,10 @@ configmap/config created
 
 # ingress, Load balancer 테스트 준비하기
 
-1. http-echo 서버인 2개 pod(foo, bar) 생성하기 (w/ 성공 output)
+1. [pod 버전] http-echo 서버인 2개 pod(foo, bar) 생성하기 (w/ 성공 output)
 
 ```bash
-> kubectl apply -f ./pods.yaml
+> kubectl apply -f ./pods-http-echo.yaml
 ...
 pod/foo-app created
 pod/bar-app created
@@ -242,6 +243,30 @@ NAME      READY   STATUS    RESTARTS   AGE
 bar-app   1/1     Running   0          45s
 foo-app   1/1     Running   0          45s
 ```
+
+1. [deployment 버전] http-echo 서버인 4개 pod(foo 2개, bar 2개) 생성하기 (w/ 성공 output)
+
+```bash
+> kubectl apply -f ./deployment-http-echo.yaml
+...
+deployment.apps/deployment-foo created
+deployment.apps/deployment-bar created
+...
+> kubectl get deployments
+...
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+deployment-bar   2/2     2            2           13m
+deployment-foo   2/2     2            2           13m
+...
+> kubectl get pods
+...
+NAME                              READY   STATUS    RESTARTS   AGE
+deployment-bar-565c58bc76-lv9zn   1/1     Running   0          14m
+deployment-bar-565c58bc76-p2zt4   1/1     Running   0          14m
+deployment-foo-7d77c84f46-lcwnq   1/1     Running   0          14m
+deployment-foo-7d77c84f46-lh6qs   1/1     Running   0          14m
+```
+
 
 2. 서비스 생성하기 (w/ 성공 output)
 

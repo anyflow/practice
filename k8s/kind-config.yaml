@@ -31,3 +31,4 @@ nodes:
 
 - role: worker # configuration for worker1 node
 - role: worker # configuration for worker2 node
+- role: worker # configuration for worker3 node
