@@ -53,7 +53,7 @@
   - 특히, 로컬에서의 테스트를 위한 전용 포트포워딩 설정이 중요
   - 세부 설정에 대한 설명은 파일 내 comment 참조
 
-- `pods.yaml`
+- `pods-http-echo.yaml`, `deployment-http-echo.yaml`
   - 2개의 http echo 서버(`foo`, `bar`) 컨테이너 pod 설정 (config type : `pod`)
   - http echo 서버는 사전 설정에 따라, 호출 시 단순히 `foo!`, `bar!`를 응답
   - 세부 설정에 대한 설명은 파일 내 comment 참조
@@ -249,22 +249,22 @@ foo-app   1/1     Running   0          45s
 ```bash
 > kubectl apply -f ./deployment-http-echo.yaml
 ...
-deployment.apps/deployment-foo created
-deployment.apps/deployment-bar created
+deployment.apps/foo created
+deployment.apps/bar created
 ...
 > kubectl get deployments
 ...
 NAME             READY   UP-TO-DATE   AVAILABLE   AGE
-deployment-bar   2/2     2            2           13m
-deployment-foo   2/2     2            2           13m
+bar   2/2     2            2           13m
+foo   2/2     2            2           13m
 ...
 > kubectl get pods
 ...
 NAME                              READY   STATUS    RESTARTS   AGE
-deployment-bar-565c58bc76-lv9zn   1/1     Running   0          14m
-deployment-bar-565c58bc76-p2zt4   1/1     Running   0          14m
-deployment-foo-7d77c84f46-lcwnq   1/1     Running   0          14m
-deployment-foo-7d77c84f46-lh6qs   1/1     Running   0          14m
+bar-565c58bc76-lv9zn   1/1     Running   0          14m
+bar-565c58bc76-p2zt4   1/1     Running   0          14m
+foo-7d77c84f46-lcwnq   1/1     Running   0          14m
+foo-7d77c84f46-lh6qs   1/1     Running   0          14m
 ```
 
 

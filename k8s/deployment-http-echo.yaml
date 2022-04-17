@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deployment-foo
+  name: foo
 spec:
   selector:
     matchLabels:
@@ -30,7 +30,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deployment-bar
+  name: bar
 spec:
   selector:
     matchLabels:
