@@ -56,7 +56,25 @@
    > rs.stepDown()
    ```
 
-## 참고
+# 검토 TODO
 
-- 특정 pod bash에 접근 : `kubectl exec --stdin --tty <pod name> -- /bin/bash`
-- network util pod 생성 및 shell 로그인 `kubectl run my-shell --rm -i --tty --image praqma/network-multitool -- bash`
+### Kind Persistent Volumes
+
+- URL : <https://mauilion.dev/posts/kind-pvc/>
+
+1. **default storage class**: I want there to be a built in storage class so that I can deploy applications that request persistent volume claims.
+
+2. **pod restart**: If my pod restarts I want that pod to be scheduled such that the persistent volume claim is available to my pod. This ensures that if I have to restart and my pod will always come back with access to the same data.
+
+3. **restore volumes**: I want to be able to bring up a kind cluster and regain access to a previously provisioned persistent volume claim.
+
+4. **volume mobility**: I want to be able to schedule my pod to multiple nodes and have it access the same persistent volume claim. This requires that the peristent volume be made available to all nodes.
+
+### 쿠버네티스 볼륨 개념 정리
+
+- URL : <https://blog.eunsukim.me/posts/kubernetes-volume-overview>
+
+1. Persistent Volume
+2. Persistent Volume Claim
+3. Storage Class
+4. 상기 항목의 용도 : 볼륨 관리자와 볼륨 사용자 관점에서 설명
