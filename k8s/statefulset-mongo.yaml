@@ -1,0 +1,75 @@
+#https://kubernetes.io/blog/2017/01/running-mongodb-on-kubernetes-with-statefulsets/
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+  labels:
+    name: mongo
+spec:
+  ports:
+  - port: 27017
+    targetPort: 27017
+  clusterIP: None
+  selector:
+    role: mongo
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+spec:
+  serviceName: mongodb-service
+  selector:
+    matchLabels:
+      app: mongodb
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:5.0.7
+        args:
+        # - '--config'
+        # - '/hostroot/mongo/mongod.conf'
+        - '--bind_ip'
+        - '0.0.0.0'
+        - '--replSet'
+        - 'anyflow-replset'
+        - '--auth'
+        - '--clusterAuthMode'
+        - 'keyFile'
+        - '--keyFile'
+        - '/etc/secrets-volume/mongo-keyfile'
+        - "--setParameter"
+        - "authenticationMechanisms=SCRAM-SHA-1"
+        resources:
+          limits:
+            memory: '128Mi'
+            cpu: '500m'
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: secrets-volume
+          readOnly: true
+          mountPath: /etc/secrets-volume
+        - name: mongo-claim
+          mountPath: /data/db
+      volumes:
+      - name: secrets-volume
+        secret:
+          secretName: shared-bootstrap-data
+          defaultMode: 256
+  volumeClaimTemplates:
+  - metadata:
+      name: mongo-claim
+    spec:
+      storageClassName: standard # standard는 kind에 기본적으로 딸려오는 provisioner로 local-path-provisioner를 사용
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi

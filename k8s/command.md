@@ -4,6 +4,8 @@
 
   ```bash
   kubectl exec --stdin --tty <pod name> -- /bin/bash
+  #or
+  kubectl exec -it <pod name> -- bash
   ```
 
 - network util pod 생성 및 shell 로그인
@@ -40,6 +42,6 @@
   kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | awk '/^deployment-controller-token-/{print $1}') | awk '$1=="token:"{print $2}'
   ```
 
-# 참고 : TODO
+# TODO
 
 - dashboard에 service, ingress, node 등의  항목이 나타나지 않는데, 이를 해결
