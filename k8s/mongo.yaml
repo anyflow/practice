@@ -1,5 +1,3 @@
-#https://maruftuhin.com/blog/mongodb-replica-set-on-kubernetes/
-
 apiVersion: v1
 kind: Service
 metadata:

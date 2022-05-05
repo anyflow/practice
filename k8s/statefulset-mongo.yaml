@@ -10,9 +10,9 @@ spec:
   ports:
   - port: 27017
     targetPort: 27017
-  clusterIP: None
+  clusterIP: None     # headless service - No load balancer, But DNS
   selector:
-    role: mongo
+    app: mongodb      # To be looked up by DNS, the selector should be matched with the pod's.
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -43,7 +43,8 @@ spec:
         - '--clusterAuthMode'
         - 'keyFile'
         - '--keyFile'
-        - '/etc/secrets-volume/mongo-keyfile'
+        - '/hostroot/mongo/keyfile'
+        # - '/etc/secrets-volume/mongo-keyfile'
         - "--setParameter"
         - "authenticationMechanisms=SCRAM-SHA-1"
         resources:
@@ -53,19 +54,24 @@ spec:
         ports:
         - containerPort: 27017
         volumeMounts:
-        - name: secrets-volume
-          readOnly: true
-          mountPath: /etc/secrets-volume
-        - name: mongo-claim
+        - name: hostroot
+          mountPath: /hostroot
+        - name: mongo-persistent-volume-claim
           mountPath: /data/db
+        # - name: secrets-volume
+        #   mountPath: /etc/secrets-volume
+        #   readOnly: true
       volumes:
-      - name: secrets-volume
-        secret:
-          secretName: shared-bootstrap-data
-          defaultMode: 256
+      - name: hostroot
+        hostPath:
+          path: /hostroot
+      # - name: secrets-volume
+      #   secret:
+      #     secretName: shared-bootstrap-data
+      #     defaultMode: 256
   volumeClaimTemplates:
   - metadata:
-      name: mongo-claim
+      name: mongo-persistent-volume-claim
     spec:
       storageClassName: standard # standard는 kind에 기본적으로 딸려오는 provisioner로 local-path-provisioner를 사용
       accessModes:

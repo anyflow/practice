@@ -1,142 +1,210 @@
-# StatefulSet, 그리고 PV, PVC, StorageClass
+# StatefulSet으로 MongoDB Replica Set 구성하기
 
-- mongoDB 리플리카셋을 (ReplicaSet)이 아닌 StatefulSet 기반으로
 
-- [StatefulSet, 그리고 PV, PVC, StorageClass](#statefulset-그리고-pv-pvc-storageclass)
-  - [Description](#description)
-  - [Volume](#volume)
-    - [Host Volume](#host-volume)
-    - [`PersistentVolume` (PV)](#persistentvolume-pv)
-    - [`PersistentVolumeClaim` (PVC)](#persistentvolumeclaim-pvc)
-    - [StorageClass](#storageclass)
-  - [(드디어) `StatefulSet`](#드디어-statefulset)
-    - [`StatefulSet` 등장 배경](#statefulset-등장-배경)
-    - [`StatefulSet` 특징](#statefulset-특징)
-  - [References](#references)
-## Description
+## 사전 준비
 
-- mongodb replication cluster를 k8s kind cluster로 설정하기 via `StatefulSet`
-- 이를 위한 사전 지식 정리
+- 동적 생성된 volume 저장용 directory, mongoDB 공유 `keyfile` 저장용 directory 생성
 
-## Volume
-
-<p align="center">
-   <img src="./pv-pvc-volume.png" alt="drawing" width="800" ref/>
-   <figcaption align="center"><b></b></figcaption>
-</p>
-
-### Host Volume
-
-- pod가 위치한 host node내의 storage. pod 정의부의 `spec.volumes`에 정의
-
-  ```yaml
-   spec:
-      containers:
-         ...
-         volumeMounts:
-         - name: my-volume
-           mountPath: /pod-volume
-
-      volumes:
-      - name: my-volume
-        hostPath:
-           path: /some/path/in/host/node
+  ```bash
+  > mkdir ./pvc ./hostroot_in_node
   ```
 
-### `PersistentVolume` (PV)
+- mongoDB용 `keyfile` 생성
 
-- storage에 대한 추상화된 k8s resource. `spec.storageClassName`가 이 저장소에 대한 식별자임. 아래에서는 `hostPath`를 통해 Host Volume을 사용함을 지정했는데, NFS, AWS EBS, `configMap`, `emptyDir`, `secret` 등 다양한 형태를 정의 가능함
-
-  ```yaml
-   apiVersion: v1
-   kind: PersistentVolume
-   metadata:
-      name: my-volume
-   spec:
-      storageClassName: mystorage
-      capacity:
-         storage: 1Gi
-      accessModes:
-         - ReadWriteOnce
-      hostPath:
-         path: /some/path
+  ```bash
+  > openssl rand -base64 741 > ./hostroot_in_node/mongo/keyfile
   ```
 
-### `PersistentVolumeClaim` (PVC)
+## 설치
+### k8s 클러스터 생성
 
-- PV를 사용하기 위한 요청(claim)을 나타내는 k8s resource. PV와는 `storageClassName`을 통해 **연결**됨 (여기서는 `mystorage`).
-- PV의 관리 주체는 Storage 관리자인 반면, PVC의 관리 주체는 해당 storage의 사용자(아마도 Pod 관리자). 이로 인해 PV와 PVC 생명주기도 달라질 수 있음.
-- PV와는 달리 PVC는 특정 `namespace`에 속함(왜냐하면 Pod 관리자가 관리하므로)
+- k8s 클러스터 생성 (w/ 성공 output)
 
-   ```yaml
-   apiVersion: v1
+  ```bash
+  > kind create cluster --config ./statefulset-mongo-kind-config.yaml
+  ...
+  Creating cluster "kind" ...
 
-   kind: PersistentVolumeClaim
-   metadata:
-      name: my-claim
-   spec:
-      storageClassName: mystorage
-      accessModes:
-         - ReadWriteOnce
-      resources:
-         requests:
-            storage: 2Gi
-   ```
-   상기 예에서 `PersistentVolumeClaim` 사용하기 위해서는 pod manifest의 `spec.volumes`내 `hostPath` 부분을 `persistentVolumeClaim`으로 변경하면 됨.
+  ✓ Ensuring node image (kindest/node:v1.21.1) 🖼
+  ✓ Preparing nodes 📦 📦 📦 📦
+  ✓ Writing configuration 📜
+  ✓ Starting control-plane 🕹️
+  ✓ Installing CNI 🔌
+  ✓ Installing StorageClass 💾
+  ✓ Joining worker nodes 🚜
+  Set kubectl context to "kind-kind"
+  You can now use your cluster with:
 
-   ```yaml
-      ...
-      volumes:
-      - name: my-volume
-         #hostPath:
-         #   path: /some/path/in/host/node
-         persistentVolumeClaim:
-            claimName: my-claim
-   ```
+  kubectl cluster-info --context kind-kind
 
-### StorageClass
+  Thanks for using kind! 😊
+  ```
 
-- PV와 달리 On Demand 방식으로 volume을 생성하도록 하는 당연스럽게도 PV는 pod로부터 사용되기 전에 생성되어야 함(PV가 없을 경우 pod 생성 시 pending 상태로 됨). 이럴 때 StorageClass를 사용하는데... 무엇보다도 아래 `StatefulSet`에서 필요!
+### mongoDB 인스턴스 생성
 
-<p align="center">
-   <img src="./storageClass.png" alt="drawing" width="800" ref/>
-   <figcaption align="center"><b>출처 : Kubernetes In Action</b></figcaption>
-</p>
+- secret에 `keyfile` 저장
 
-## (드디어) `StatefulSet`
+  ```bash
+  > kubectl create secret generic shared-bootstrap-data --from-file=mongo-keyfile=./hostroot_in_node/mongo/keyfile
+  ```
 
-### `StatefulSet` 등장 배경
+- StatefulSet 기반으로 mongoDB 배포 (w/ 성공 output)
 
-- `Deployment`에 속한 모든 `ReplicaSet`의 Pod는 서로간 구분이 없는 복제본일 뿐임. 따라서 생성 순서도 없음.
-- PV, PVC는 Pod간에 공유 불가. 단일 `ReplicaSet`을 통해서는 Pod별로 각기 다른 PV, PVC 지정이 불가능. 이를 해결하기 위해 `StatefulSet` 등장(?)
+  ```bash
+  > kubectl apply -f ./statefulset-mongo.yaml
+  ...
+  service/mongodb-service created
+  statefulset.apps/mongo created
+  ```
 
-<p align="center">
-   <img src="./replicaset-pv-pvc.png" alt="drawing" width="800" ref/>
-   <figcaption align="center"><b>출처 : Kubernetes In Action</b></figcaption>
-</p>
+- 정상 배포 확인 (w/ 성공 output)
 
-### `StatefulSet` 특징
+  ```bash
+  > kubectl get all
+  ...
+  NAME          READY   STATUS              RESTARTS   AGE
+  pod/mongo-0   1/1     Running   0          6m3s
+  pod/mongo-1   1/1     Running   0          5m21s
+  pod/mongo-2   1/1     Running   0          4m40s
 
-- **Pod 이름에 식별자 부여** : 예컨데 mynginx란 이름의 pod를 정의하면 생성 시 mynginx-0, mynginx-1, mynginx-2...식으로 이름이 부여됨
-- **Pod 생성 순서화** : 정해진 순서대로 생성
-- **Pod 별로 PVC 관리** : PVC를 템플릿 형태로 정의하여 각 Pod 별로 PVC, PV 생성 관리 가능
+  NAME                      TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)     AGE
+  service/kubernetes        ClusterIP   10.96.0.1    <none>        443/TCP     11m
+  service/mongodb-service   ClusterIP   None         <none>        27017/TCP   6m3s
 
-<p align="center">
-   <img src="./statefulset-pv-pvc.png" alt="drawing" width="800" ref/>
-   <figcaption align="center"><b>출처 : Kubernetes In Action</b></figcaption>
-</p>
+  NAME                     READY   AGE
+  statefulset.apps/mongo   3/3     6m3s
+
+  > kubectl get pv,pvc
+  ...
+  NAME                                                        CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                                           STORAGECLASS   REASON   AGE
+  persistentvolume/pvc-0acb895f-5c83-4344-a465-2ffc30751282   1Gi        RWO            Delete           Bound    default/mongo-persistent-volume-claim-mongo-2   standard                10m
+  persistentvolume/pvc-73ddbf20-76ea-4d64-b96d-4e6151f04cdd   1Gi        RWO            Delete           Bound    default/mongo-persistent-volume-claim-mongo-1   standard                11m
+  persistentvolume/pvc-77266513-3c08-494e-ad57-731e7c42d823   1Gi        RWO            Delete           Bound    default/mongo-persistent-volume-claim-mongo-0   standard                11m
+
+  NAME                                                          STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+  persistentvolumeclaim/mongo-persistent-volume-claim-mongo-0   Bound    pvc-77266513-3c08-494e-ad57-731e7c42d823   1Gi        RWO            standard       11m
+  persistentvolumeclaim/mongo-persistent-volume-claim-mongo-1   Bound    pvc-73ddbf20-76ea-4d64-b96d-4e6151f04cdd   1Gi        RWO            standard       11m
+  persistentvolumeclaim/mongo-persistent-volume-claim-mongo-2   Bound    pvc-0acb895f-5c83-4344-a465-2ffc30751282   1Gi        RWO            standard       10m
+  ```
+
+- DNS에 mongodb-service 및 개별 pod가 정상 등록되었는지 확인
+
+  ```bash
+  > kubectl apply -f /k8s.io/examples/admin/dns/dnsutils.yaml # cluster내에서 nslookup 실행을 위한 dnsutils pod 설치
+  ...
+  pod/dnsutils created
+
+  > kubectl exec -i -t dnsutils -- nslookup mongodb-service # mongodb-service가 nslookup 되는지 확인
+  ...
+  Server:         10.96.0.10
+  Address:        10.96.0.10#53
+  Name:   mongodb-service.default.svc.cluster.local
+  Address: 10.244.2.3
+  Name:   mongodb-service.default.svc.cluster.local
+  Address: 10.244.1.3
+  Name:   mongodb-service.default.svc.cluster.local
+  Address: 10.244.3.3
+
+   # 개별 pod가 nslookup 되는지 확인
+  > kubectl exec -i -t dnsutils -- nslookup mongo-0.mongodb-service # mongo-1, mongo-2에 대해서도 각기 수행
+  ...
+  Server:         10.96.0.10
+  Address:        10.96.0.10#53
+
+  Name:   mongo-0.mongodb-service.default.svc.cluster.local
+  Address: 10.244.2.3
+  ```
+### MongoDB Replica Set 설정
+
+  ```bash
+  > kubectl exec -it mongo-0 -- bash # mongo-0의 shell에 로그인
+  ...
+  root@mongo-0:/#
+
+  > mongosh # mongo shell에 로그인
+  ...
+  Current Mongosh Log ID: 62738f0686b5b44653c0329f
+  Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000appName=mongosh+1.3.1
+  Using MongoDB:          5.0.7
+  Using Mongosh:          1.3.1
+
+  For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+
+  To help improve our products, anonymous usage data is collected and sent to MongoDB periodically (https:/www.mongodb.com/legal/privacy-policy).
+  You can opt-out by running the disableTelemetry() command.
+
+  test>
+
+  # mongoDB Replica Set 구성을 위해 각 node 연결 (위에서 확인한 Domain을 hostname으로 사용 중)
+  > rs.initiate({ _id: "anyflow-replset", version: 1, members: [
+  ... {_id: 0, host: "mongo-0.mongodb-service:27017" },
+  ... { _id: 1, host : "mongo-1.mongodb-service:27017" },
+  ... {_id: 2, host: "mongo-2.mongodb-service:27017" }] });
+  ...
+  { ok: 1 }
+
+  # 정상적으로 MongoDB Replica Set이 생성되었는지 확인
+  > rs.status()
+  ...
+  {
+    set: 'anyflow-replset',
+    ...
+    members: [
+        {
+            _id: 0,
+            name: 'mongo-0.mongodb-service:27017',
+            ...
+            stateStr: 'PRIMARY',
+            ...
+        },
+        {
+            _id: 1,
+            name: 'mongo-1.mongodb-service:27017',
+            ...
+            stateStr: 'SECONDARY', # 정상 연결이 안되면 STARTUP 등 타 값이 나타남
+            ...
+        },
+        {
+            _id: 2,
+            name: 'mongo-2.mongodb-service:27017',
+            ...
+            stateStr: 'SECONDARY', # 정상 연결이 안되면 STARTUP 등 타 값이 나타남
+            ...
+        }
+    ],
+    ok: 1,
+    ...
+  }
+
+  # admin 계정 생성 mongoDB의 Localhost Exception 모드 제거
+  > db.getSiblingDB('admin').createUser({
+    ... user: 'mongo-admin',
+    ... pwd: 'mongo-pass',
+    ... roles: [{ role: 'root', db: 'admin' }]
+    ... });
+  ...
+  {
+    ok: 1,
+    '$clusterTime': {
+        clusterTime: Timestamp({ t: 1651741430, i: 4 }),
+        signature: {
+            hash: Binary(Buffer.from("ba58556a10615fe5795debf1f0a5859a5761fcab", "hex"), 0),
+            keyId: Long("7094171789755940868")
+        }
+    },
+    operationTime: Timestamp({ t: 1651741430, i: 4 })
+  }
+
+  > exit
+  ```
+
+## 테스트
+
+- mongoDB Replica Set 정상 동작 확인
+
 
 ## References
 
-- **Kind Persistent Volumes** : <https://mauilion.dev/posts/kind-pvc/>
-  1. **default storage class**: I want there to be a built in storage class so that I can deploy applications that request persistent volume claims.
-
-  2. **pod restart**: If my pod restarts I want that pod to be scheduled such that the persistent volume claim is available to my pod. This ensures that if I have to restart and my pod will always come back with access to the same data.
-
-  3. **restore volumes**: I want to be able to bring up a kind cluster and regain access to a previously provisioned persistent volume claim.
-
-  4. **volume mobility**: I want to be able to schedule my pod to multiple nodes and have it access the same persistent volume claim. This requires that the peristent volume be made available to all nodes.
-
-- **볼륨(Host Volume, PersistentVolume(PV), PersistentVolumeClaim)** : <https://jbhs7014.tistory.com/170>
-- **StatefulSet** : <https://jbhs7014.tistory.com/181>
-- **쿠버네티스 볼륨 개념 정리** : <https://blog.eunsukim.me/posts/kubernetes-volume-overview>
+- [Running MongoDB on Kubernetes with StatefulSets](<https://kubernetes.io/blog/2017/01/running-mongodb-on-kubernetes-with-statefulsets/>)
+- [Mongodb Replica Set on Kubernetes](<https://maruftuhin.com/blog/mongodb-replica-set-on-kubernetes/>)
