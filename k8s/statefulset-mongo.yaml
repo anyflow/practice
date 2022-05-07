@@ -1,5 +1,3 @@
-#https://kubernetes.io/blog/2017/01/running-mongodb-on-kubernetes-with-statefulsets/
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -10,7 +8,7 @@ spec:
   ports:
   - port: 27017
     targetPort: 27017
-  clusterIP: None     # headless service - No load balancer, But DNS
+  clusterIP: None     # headless service via None ClusterIP : No load balancer, But DNS
   selector:
     app: mongodb      # To be looked up by DNS, the selector should be matched with the pod's.
 ---
@@ -33,8 +31,6 @@ spec:
       - name: mongo
         image: mongo:5.0.7
         args:
-        # - '--config'
-        # - '/hostroot/mongo/mongod.conf'
         - '--bind_ip'
         - '0.0.0.0'
         - '--replSet'
@@ -44,7 +40,6 @@ spec:
         - 'keyFile'
         - '--keyFile'
         - '/hostroot/mongo/keyfile'
-        # - '/etc/secrets-volume/mongo-keyfile'
         - "--setParameter"
         - "authenticationMechanisms=SCRAM-SHA-1"
         resources:
@@ -58,17 +53,10 @@ spec:
           mountPath: /hostroot
         - name: mongo-persistent-volume-claim
           mountPath: /data/db
-        # - name: secrets-volume
-        #   mountPath: /etc/secrets-volume
-        #   readOnly: true
       volumes:
       - name: hostroot
         hostPath:
           path: /hostroot
-      # - name: secrets-volume
-      #   secret:
-      #     secretName: shared-bootstrap-data
-      #     defaultMode: 256
   volumeClaimTemplates:
   - metadata:
       name: mongo-persistent-volume-claim

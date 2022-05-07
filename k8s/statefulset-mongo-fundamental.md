@@ -1,24 +1,19 @@
 # StatefulSet, 그리고 PV, PVC, StorageClass
 
-*mongoDB 리플리카셋을 (ReplicaSet)이 아닌 StatefulSet 기반으로*
-
----
-- [StatefulSet, 그리고 PV, PVC, StorageClass](#statefulset-그리고-pv-pvc-storageclass)
-  - [Description](#description)
-  - [Volume](#volume)
-    - [Host Volume](#host-volume)
-    - [`PersistentVolume` (PV)](#persistentvolume-pv)
-    - [`PersistentVolumeClaim` (PVC)](#persistentvolumeclaim-pvc)
-    - [StorageClass](#storageclass)
-  - [(드디어) `StatefulSet`](#드디어-statefulset)
-    - [`StatefulSet` 등장 배경](#statefulset-등장-배경)
-    - [`StatefulSet` 특징](#statefulset-특징)
-  - [References](#references)
----
+- [Description](#description)
+- [Volume](#volume)
+   - [Host Volume](#host-volume)
+   - [`PersistentVolume` (PV)](#persistentvolume-pv)
+   - [`PersistentVolumeClaim` (PVC)](#persistentvolumeclaim-pvc)
+   - [StorageClass](#storageclass)
+- [(드디어) `StatefulSet`](#드디어-statefulset)
+   - [`StatefulSet` 등장 배경](#statefulset-등장-배경)
+   - [`StatefulSet` 특징](#statefulset-특징)
+- [References](#references)
 
 ## Description
 
-- `statefulset-mongo.yaml`을 위한 사전 지식 정리
+- mongoDB 리플리카셋을 (ReplicaSet)이 Deployment가 아닌 StatefulSet 구성하기 위한 사전 지식 정리
 
 ## Volume
 
@@ -131,14 +126,7 @@
 ## References
 
 - **Kind Persistent Volumes** : <https://mauilion.dev/posts/kind-pvc/>
-  1. **default storage class**: I want there to be a built in storage class so that I can deploy applications that request persistent volume claims.
-
-  2. **pod restart**: If my pod restarts I want that pod to be scheduled such that the persistent volume claim is available to my pod. This ensures that if I have to restart and my pod will always come back with access to the same data.
-
-  3. **restore volumes**: I want to be able to bring up a kind cluster and regain access to a previously provisioned persistent volume claim.
-
-  4. **volume mobility**: I want to be able to schedule my pod to multiple nodes and have it access the same persistent volume claim. This requires that the peristent volume be made available to all nodes.
-
+- **Kubenetes in Action** by MARKO LUKŠA
 - **볼륨(Host Volume, PersistentVolume(PV), PersistentVolumeClaim)** : <https://jbhs7014.tistory.com/170>
 - **StatefulSet** : <https://jbhs7014.tistory.com/181>
 - **쿠버네티스 볼륨 개념 정리** : <https://blog.eunsukim.me/posts/kubernetes-volume-overview>
