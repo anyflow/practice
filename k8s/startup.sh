@@ -4,7 +4,7 @@ Green='\033[0;32m'        # Green
 NC='\033[0m'              # No Color
 
 echo "${Green}[startup] Creating k8s cluster...${NC}"
-kind create cluster --config ./kind-config.yaml
+kind create cluster --config ./statefulset-mongo-kind-config.yaml
 
 echo
 echo "${Green}[startup] Deploying NGINX ingress controller...${NC}"
