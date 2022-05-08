@@ -1,6 +1,8 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-  "python.defaultInterpreterPath": "/Users/anyflow/virtualenv/practice/bin/python3.9",
+  "python.defaultInterpreterPath": "/Users/anyflow/virtualenv/practice/bin/python3.10",
+  "python.terminal.activateEnvInCurrentTerminal": true,
+  "python.terminal.activateEnvironment": true,
   "python.formatting.provider": "black",
   "python.linting.flake8Enabled": true,
   "python.linting.enabled": true,

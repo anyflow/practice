@@ -1,18 +1,3 @@
-# Studies
-
-- `IP` 종류 in the point of view of `kubectl`
-  - **IP**
-    - TODO
-  - **CLUSTER-IP**
-    - TODO
-  - **EXTERNAL-IP**
-    - TODO
-- **3rd party tools**
-  - Prometheus
-  - Istio
-  - Helm
-  - Envoy
-
 # Commands
 
 - 특정 pod bash에 접근
