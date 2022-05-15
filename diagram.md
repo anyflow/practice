@@ -345,7 +345,7 @@ highlight 200 to 450 #Gold;line:DimGrey : This is my caption
 
 ## Mermaid
 
-- code block with mermaid notation will be rendered by [mermaid](https://github.com/knsv/mermaid).
+- code block with mermaid notation will be rendered by [mermaid](https://mermaid-js.github.io/mermaid/#/).
 - check mermaid doc for more information about how to create flowchart and sequence diagram
 
 ```mermaid
