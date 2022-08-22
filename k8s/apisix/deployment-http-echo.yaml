@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: foo
+spec:
+  selector:
+    matchLabels:
+      app: http-echo
+      appArgs: foo
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: http-echo
+        appArgs: foo
+    spec:
+      containers:
+        - name: http-echo
+          image: hashicorp/http-echo:0.2.3
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 5001
+          args:
+            - "-text=foo!"
+            - "-listen=:5001"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bar
+spec:
+  selector:
+    matchLabels:
+      app: http-echo
+      appArgs: bar
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: http-echo
+        appArgs: bar
+    spec:
+      containers:
+        - name: http-echo
+          image: hashicorp/http-echo:0.2.3
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 5001
+          args:
+            - "-text=bar!"
+            - "-listen=:5001"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: foo-service
+spec:
+  selector:
+    appArgs: foo
+  ports:
+    - port: 5000 # 서비스 노출 port
+      targetPort: 5001
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: bar-service
+spec:
+  selector:
+    appArgs: bar
+  ports:
+    - port: 5000 # 서비스 노출 port
+      targetPort: 5001
