@@ -18,8 +18,8 @@ kubectl wait --namespace ingress-nginx \
   --timeout=90s
 
 echo
-echo "${Green}Deploying deployment/service/ingress htto echo...${NC}"
-kubectl apply -f './http-echo.yaml'
+echo "${Green}Deploying deployment/service/ingress echo server...${NC}"
+kubectl apply -f './echo-server.yaml'
 
 echo
 echo "${Green}Deploying APISIX etcd...${NC}"

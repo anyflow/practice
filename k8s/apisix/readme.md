@@ -19,28 +19,14 @@
 ### APISIX Route 생성
 
 ```bash
-curl "http://127.0.0.1:9080/apisix/admin/routes/2" -H "X-API-KEY: edd1c9f034335f136f87ad84b625c8f1" -X PUT -d '
-{
-  "methods": ["GET"],
-  "uri": "/foo",
-  "upstream": {
-    "type": "roundrobin",
-    "nodes": {
-      "foo-service:5000": 1
-    }
-  }
-}'
-```
-
-```bash
 curl "http://127.0.0.1:9080/apisix/admin/routes/3" -H "X-API-KEY: edd1c9f034335f136f87ad84b625c8f1" -X PUT -d '
 {
   "methods": ["GET"],
-  "uri": "/bar",
+  "uris": ["/echo/*", "/echo"],
   "upstream": {
     "type": "roundrobin",
     "nodes": {
-      "bar-service:5000": 1
+      "echo-service:5000": 1
     }
   }
 }'
