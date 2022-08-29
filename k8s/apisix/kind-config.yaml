@@ -26,7 +26,7 @@ nodes:
         hostPort: 8080
         protocol: TCP
       - containerPort: 30080 #for APISIX
-        hostPort: 30080
+        hostPort: 9080
         protocol: TCP
       - containerPort: 9000 #for APISIX Dashboard
         hostPort: 9000
