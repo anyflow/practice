@@ -18,4 +18,4 @@ node_modules
 k8s/pvc
 
 #mongodb data
-mongodb/db
+mongodb/data
