@@ -1,19 +1,12 @@
-# StatefulSet, 그리고 PV, PVC, StorageClass
-
-- [Description](#description)
 - [Volume](#volume)
-   - [Host Volume](#host-volume)
-   - [`PersistentVolume` (PV)](#persistentvolume-pv)
-   - [`PersistentVolumeClaim` (PVC)](#persistentvolumeclaim-pvc)
-   - [StorageClass](#storageclass)
+  - [Host Volume](#host-volume)
+  - [`PersistentVolume` (PV)](#persistentvolume-pv)
+  - [`PersistentVolumeClaim` (PVC)](#persistentvolumeclaim-pvc)
+  - [StorageClass](#storageclass)
 - [(드디어) `StatefulSet`](#드디어-statefulset)
-   - [`StatefulSet` 등장 배경](#statefulset-등장-배경)
-   - [`StatefulSet` 특징](#statefulset-특징)
+  - [`StatefulSet` 등장 배경](#statefulset-등장-배경)
+  - [`StatefulSet` 특징](#statefulset-특징)
 - [References](#references)
-
-## Description
-
-- mongoDB 리플리카셋을 (ReplicaSet)이 Deployment가 아닌 StatefulSet 구성하기 위한 사전 지식 정리
 
 ## Volume
 

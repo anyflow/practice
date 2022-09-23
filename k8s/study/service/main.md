@@ -25,7 +25,7 @@
   - k8s는 pod에 IP 할당을 pod가 스케줄된 후에, 그리고 시작되기 전에 함 : client는 pod의 IP를 알 수 없음.
   - 수평 확장은 여러 pod가 동일 서비스를 제공 가능함을 의미함 : client는 단일 IP로 서비스에 접근할 수 없음.
 - 모든 서비스(Service)는 자신만의 IP(Cluster IP, VIP(Virtual IP)), port를 가짐(예외 : headless service. `ClusterIP : None` 설정)
-- pod에 대한 자체적 load balancer 기능 포함.
+- **pod에 대한 자체적 load balancer 기능 포함(노드 내 pod 간, 노드 외 pod 간에 관계 없이)**
 - 자체 DNS 이름을 가짐(`metadata.name` 참조).
 - 3개 타입이 있음: `ClusterIP`, `NodePort`, `LoadBalancer`
 - L4에서 동작함.

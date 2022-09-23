@@ -1,11 +1,9 @@
-# Ingress
-
-- [기본 사항](#기본-사항)
+- [Ingress 기본 사항](#ingress-기본-사항)
 - [Ingress 동작 절차](#ingress-동작-절차)
 - [AWS ALB Ingress controller](#aws-alb-ingress-controller)
 - [References](#references)
 
-## Ingress 기본 사항
+# Ingress 기본 사항
 
 - 다음의 두 가지로 구성
   - `Ingress controller`
@@ -18,7 +16,7 @@
   <img src="ingress-multi-service.png" width="700"/>
 - 일반적으로, `NodePort`를 사용하여 pod와 통신. 참고로 클라우드 공급자는 Ingress가 대응하는 Service가 `NodePort` 타입일 것을 요구(k8s의 요구사항은 아님. Ingress controllers on cloud providers (in GKE, for example) require the Ingress to point to a NodePort service. But that’s not a requirement of Kubernetes itself)
 
-## Ingress 동작 절차
+# Ingress 동작 절차
 
   1. client는 DNS로부터 Ingress controller의 IP를 얻음
   2. client는 Ingress controller로 HTTP request, 이때 `Host` 해더에 Domain Name을 추가.
@@ -27,7 +25,7 @@
   5. (참고) Ingress, Service, Endpoints는 단순 참조임. 따라서 Ingress controller는 Service로 request를 보내지 않음.
   <img src="ingress-access.png" width="700"/>
 
-## AWS ALB Ingress controller
+# AWS ALB Ingress controller
 
 - AWS ALB 역시 reverse proxy. 여기에 Ingress controller feature가 추가됨.
 - 두 가지 모드로 동작
@@ -36,7 +34,7 @@
 - 그림 상에서 `alb-ingress-controller`의 역할이 흥미로운데, `Ingress Resource` 참조 역할을 담당(즉, 실제 packet routing은 하지 않음. 예상컨데, ALB가 범용 L7 LB 요구와 k8s의 Ingress feature 요구를 동시에 만족시키기 위해 취한 기법일 듯)
 <img src="ALB-ingress-controller.png" width="700"/>
 
-## References
+# References
 
 - [A Guide to the Kubernetes Networking Model](https://sookocheff.com/post/kubernetes/understanding-kubernetes-networking-model/)
 - [Kubernetes in Action](https://www.manning.com/books/kubernetes-in-action)
