@@ -291,13 +291,14 @@ ingress-foobar   <none>   *                 80      6s
 
 - **확인 대상** : L7 기반(**http path**)으로 routing
 - **테스트 방법** : 테스트 동일 hostname (L4) 임에도 path가 다른 (L7) `/foo`, `/bar`로 각기 호출 및 각기 다른 결과 발생 확인
+- **(참고)** : `echo.local`을 `/etc/hosts`에 추가해주어야 함 : `127.0.0.1 echo.local`
 
 ```bash
-> curl localhost/foo
+> curl echo.local/foo
 ...
 foo!
 ...
-> curl localhost/bar
+> curl echo.local/bar
 ...
 bar!
 ```

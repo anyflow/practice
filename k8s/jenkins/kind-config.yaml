@@ -14,11 +14,18 @@ nodes:
   - containerPort: 80
     hostPort: 80
     protocol: TCP
-  - containerPort: 31593 # for NodePort
+  - containerPort: 30001 # for NodePort jenkins
+    hostPort: 30001
+    protocol: TCP
+  - containerPort: 31593 # for NodePort based foo, bar service
     hostPort: 31593
     protocol: TCP
 
 
+- role: worker
+  extraMounts:
+    - hostPath: ./hostroot_in_node
+      containerPath: /hostroot
 - role: worker
   extraMounts:
     - hostPath: ./hostroot_in_node
