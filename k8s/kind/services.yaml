@@ -3,7 +3,7 @@ apiVersion: v1
 metadata:
   name: http-echo-service
 spec:
-  type: LoadBalancer
+  type: NodePort #LoadBalancer
   selector:
     app: http-echo
   ports:

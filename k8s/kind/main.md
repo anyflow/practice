@@ -1,27 +1,27 @@
-- [Description](#description)
+- [다루는 내용](#다루는-내용)
 - [kind란?](#kind란)
 - [사전 준비](#사전-준비)
   - [1. Prerequisite : docker 설치](#1-prerequisite--docker-설치)
   - [2. kind 설치](#2-kind-설치)
   - [3. 첨부 파일 설치](#3-첨부-파일-설치)
 - [k8s 클러스터, ingress controller, load balancer 설치하기](#k8s-클러스터-ingress-controller-load-balancer-설치하기)
-  - [k8s 클러스터 생성](#k8s-클러스터-생성)
-  - [NGINX (ingress controller) 설치하기](#nginx-ingress-controller-설치하기)
-  - [Metallb (load balancer) 설치하기](#metallb-load-balancer-설치하기)
+- [k8s 클러스터 생성](#k8s-클러스터-생성)
+- [NGINX (ingress controller) 설치하기](#nginx-ingress-controller-설치하기)
+- [Metallb (load balancer) 설치하기](#metallb-load-balancer-설치하기)
 - [ingress, Load balancer 테스트 준비하기](#ingress-load-balancer-테스트-준비하기)
 - [ingress, load balancer 테스트하기](#ingress-load-balancer-테스트하기)
   - [ingress 테스트](#ingress-테스트)
   - [load balancer 테스트](#load-balancer-테스트)
 - [클러스터 삭제하기](#클러스터-삭제하기)
 
-# Description
+## 다루는 내용
 
 - **kind**가 무엇인지, 어떻게 사용하는지
 - kind를 이용한 로컬 환경에서의 **multi-node**의 Kubernetes 클러스터 구성
 - **LoadBalancer** 생성(**metallb**) 및 LoadBalancer 타입의 service 생성 및 동작 확인
 - **ingress controller** 생성(**NGINX**) 및 **ingress** 생성, 동작 확인
 
-# kind란?
+## kind란?
 
 <img src="https://d33wubrfki0l68.cloudfront.net/d0c94836ab5b896f29728f3c4798054539303799/9f948/logo/logo.png" alt="drawing" width="400"/>
 
@@ -34,32 +34,32 @@
 - 공식 documentation : <https://kind.sigs.k8s.io>
 - Github : <https://github.com/kubernetes-sigs/kind>
 
-# 사전 준비
+## 사전 준비
 
-## 1. Prerequisite : docker 설치
+### 1. Prerequisite : docker 설치
 
 - <https://docs.docker.com/get-docker/> 참고
 
-## 2. kind 설치
+### 2. kind 설치
 
 - <https://github.com/kubernetes-sigs/kind#installation-and-usage> 참고 (Linux, macOS, Windows 모두 다 있음. 무지 간단)
 
-## 3. 첨부 파일 설치
+### 3. 첨부 파일 설치
 
 하기 첨부 파일 모두는 working directory에 위치해야 함
 
-- `kind-config.yaml`
+- **`kind-config.yaml`**
   - kind 클러스터 생성 시 사용할 configuration 파일
   - k8s가 올라갈 host machine 환경에 대한 설정 - 노드 개수/타입, 네트워크
   - 특히, 로컬에서의 테스트를 위한 전용 포트포워딩 설정이 중요
   - 세부 설정에 대한 설명은 파일 내 comment 참조
 
-- `pods-http-echo.yaml`, `deployment-http-echo.yaml`
-  - 2개의 http echo 서버(`foo`, `bar`) 컨테이너 pod 설정 (config type : `pod`)
+- **`deployment-http-echo.yaml`**
+  - 2개의 http echo 서버(`foo`, `bar`) 컨테이너 pod 설정
   - http echo 서버는 사전 설정에 따라, 호출 시 단순히 `foo!`, `bar!`를 응답
   - 세부 설정에 대한 설명은 파일 내 comment 참조
 
-- `services.yaml`
+- **`services.yaml`**
   - 상기 http echo 서버를 노출하기 위한 설정 (config type : `service`)
   - `foo-service`, `bar-service`
     - `ClusterIP` 타입(default)의 k8s 서비스
@@ -69,16 +69,16 @@
     - `LoadBalancer` 타입 특성 상 external IP로 접근 가능하지만, macOS, Windows에서는 *docker* network를 host에 노출하지 않으므로 여기서는 `NodePort`를 통해 외부에 노출 (port : 31593.<br/>***참고로 이 땜시 개고생함***. NodePort로 우회하는 전략을 설명하는 문서가 전무. 오직 hint만 kind 공식 문서에 있을 뿐. [macOS의 경우 docker network를 노출하는 방법](<https://www.thehumblelab.com/kind-and-metallb-on-mac/>)이 있긴 한데, 이 문서의 prerequisite인 tuntap 설치가 macOS에서는 이제 불가)
   - 세부 설정에 대한 설명은 파일 내 comment 참조
 
-- `ingress.yaml`
+- **`ingress.yaml`**
   - `ingress` 규칙 설정
   - `/foo` path로 호출하면 `foo-service`가, `/bar` path로 호출하면 `bar-service`가 서비스됨
   - 세부 설정에 대한 설명은 파일 내 comment 참조
 
-- `metallib-configmap.yaml`
+- **`metallib-configmap.yaml`**
   - load balancer 설정 : 외부 노출 주소 범위를 설정하는데, linux에서만 해당 주소 범위에 접근 가능.
   - 세부 설정에 대한 설명은 파일 내 comment 참조
 
-# k8s 클러스터, ingress controller, load balancer 설치하기
+## k8s 클러스터, ingress controller, load balancer 설치하기
 
 - ingress controller로는 NGINX 사용
 - load balancer로는 metallb 사용
@@ -228,24 +228,9 @@ speaker-dptgm                 1/1     Running   0          2m1s
 configmap/config created
 ```
 
-# ingress, Load balancer 테스트 준비하기
+## ingress, Load balancer 테스트 준비하기
 
-1. [pod 버전] http-echo 서버인 2개 pod(foo, bar) 생성하기 (w/ 성공 output)
-
-```bash
-> kubectl apply -f ./pods-http-echo.yaml
-...
-pod/foo-app created
-pod/bar-app created
-...
-> kubectl get pods
-...
-NAME      READY   STATUS    RESTARTS   AGE
-bar-app   1/1     Running   0          45s
-foo-app   1/1     Running   0          45s
-```
-
-1. [deployment 버전] http-echo 서버인 4개 pod(foo 2개, bar 2개) 생성하기 (w/ 성공 output)
+1. http-echo 서버인 4개 pod(foo 2개, bar 2개) 생성하기 (w/ 성공 output)
 
 ```bash
 > kubectl apply -f ./deployment-http-echo.yaml
@@ -300,9 +285,9 @@ NAME             CLASS    HOSTS   ADDRESS   PORTS   AGE
 ingress-foobar   <none>   *                 80      6s
 ```
 
-# ingress, load balancer 테스트하기
+## ingress, load balancer 테스트하기
 
-## ingress 테스트
+### ingress 테스트
 
 - **확인 대상** : L7 기반(**http path**)으로 routing
 - **테스트 방법** : 테스트 동일 hostname (L4) 임에도 path가 다른 (L7) `/foo`, `/bar`로 각기 호출 및 각기 다른 결과 발생 확인
@@ -317,7 +302,7 @@ foo!
 bar!
 ```
 
-## load balancer 테스트
+### load balancer 테스트
 
 - **확인 대상** : load balancer의 주 미션인 부하 분산 동작
 - **테스트 방법** : 동일 hostname:port (L4) 로 반복 호출 시 각기 다른 결과 발생 확인
@@ -339,7 +324,7 @@ foo!
 bar!
 ```
 
-# 클러스터 삭제하기
+## 클러스터 삭제하기
 
 - 생성 시 클러스터 name을 지정하지 않으면 default로 `kind`가 지정됨
 

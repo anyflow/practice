@@ -8,12 +8,10 @@
 
 ## Description
 
-- mongodb replication cluster를 k8s kind cluster로 설정하기 via `Deployment`
-
-## 본 구조의 문제점
-
-- Persistent Volume을 사용하지 않았으므로 **pod가 사라지는 즉시 데이터도 삭제됨**
-- 이를 해결하기 위해서 `Deployment` / `ReplicaSet`이 아닌 **`StatefulSet`** 기반으로 생성을 해야함
+- mongodb replication cluster를 k8s kind cluster로 설정한다. via `Deployment`
+- **본 구조의 문제점**
+  - Persistent Volume을 사용하지 않았으므로 **pod가 사라지는 즉시 데이터도 삭제됨**
+  - 이를 해결하기 위해서 `Deployment` / `ReplicaSet`이 아닌 **`StatefulSet`** 기반으로 생성을 해야함
 
 ## Prerequisite
 
