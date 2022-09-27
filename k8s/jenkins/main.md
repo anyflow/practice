@@ -10,9 +10,9 @@
 
 ## Constraints
 
-- `kind` 기반의 local Kubernetes에서 테스트한 내용이나, 아래 `kind` 특화 사항을 제외한 EKS 등에서도 유효하리라 예상함
+- `kind` 기반의 local Kubernetes에서 테스트한 내용이나, 아래 localhost 특화 사항을 제외한 EKS 등에서도 유효하리라 예상함
 
-### `kind` 특화 사항
+### localhost 특화 사항
 
 - **`jenkins-values.yaml`**
   - `serviceType: NodePort` (131 line) : EKS 등에서는 `LoadBalancer` 또는 ingress 사용

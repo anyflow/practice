@@ -129,7 +129,6 @@ controller:
   # Use Local to preserve the client source IP and avoids a second hop for LoadBalancer and Nodeport type services,
   # but risks potentially imbalanced traffic spreading.
   serviceType: NodePort
-  nodePort: 30001
   serviceExternalTrafficPolicy:
   # Jenkins controller service annotations
   serviceAnnotations: {}
@@ -143,7 +142,7 @@ controller:
   # Put labels on Jenkins controller pod
   podLabels: {}
   # Used to create Ingress record (should used with ServiceType: ClusterIP)
-  # nodePort: <to set explicitly, choose port between 30000-32767
+  nodePort: 30001
   # Enable Kubernetes Startup, Liveness and Readiness Probes
   # if Startup Probe is supported, enable it too
   # ~ 2 minutes to allow Jenkins to restart when upgrading plugins. Set ReadinessTimeout to be shorter than LivenessTimeout.
@@ -244,6 +243,8 @@ controller:
     - workflow-aggregator:590.v6a_d052e5a_a_b_5
     - git:4.11.5
     - configuration-as-code:1512.vb_79d418d5fc8
+    - blueocean:1.25.8
+    - ansicolor:1.0.2
 
   # Set to false to download the minimum required version of all dependencies.
   installLatestPlugins: true
