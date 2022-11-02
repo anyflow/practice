@@ -2,14 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: Current File",
-      "type": "python",
-      "request": "launch",
-      "program": "${file}",
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "C++ codelldb",
+      "name": "C++: Current File",
       "type": "lldb",
       "request": "launch",
       "program": "${workspaceRoot}/bin/cpp/${fileBasenameNoExtension}",
@@ -17,43 +10,6 @@
       "stopOnEntry": false,
       "cwd": "${workspaceRoot}",
       "preLaunchTask": "C++ build"
-    },
-    {
-      "name": "C++",
-      "type": "cppdbg",
-      "request": "launch",
-      "program": "${workspaceRoot}/bin/cpp/${fileBasenameNoExtension}",
-      "args": [],
-      "stopAtEntry": false,
-      "cwd": "${workspaceRoot}",
-      "environment": [],
-      "externalConsole": true,
-      "preLaunchTask": "C++ build",
-      "launchCompleteCommand": "exec-run",
-      "osx": {
-        "MIMode": "lldb",
-        "miDebuggerPath": "/Applications/Xcode.app/Contents/Developer/usr/bin/lldb-mi"
-      },
-      "linux": {
-        "MIMode": "gdb",
-        "setupCommands": [
-          {
-            "description": "Enable pretty-printing for gdb",
-            "text": "-enable-pretty-printing",
-            "ignoreFailures": true,
-          }
-        ]
-      },
-      "windows": {
-        "MIMode": "gdb",
-        "setupCommands": [
-          {
-            "description": "Enable pretty-printing for gdb",
-            "text": "-enable-pretty-printing",
-            "ignoreFailures": true
-          }
-        ]
-      }
     },
     {
       "type": "java",
@@ -68,6 +24,13 @@
       "program": "${file}",
       "cwd": "${workspaceRoot}/javascript",
       "env": {}
-    }
+    },
+    {
+      "name": "Python: Current File",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal"
+    },
   ]
 }

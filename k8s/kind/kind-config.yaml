@@ -37,7 +37,3 @@ nodes:
   extraMounts:
     - hostPath: ./hostroot_in_node
       containerPath: /hostroot
-- role: worker # configuration for worker3 node
-  extraMounts:
-    - hostPath: ./hostroot_in_node
-      containerPath: /hostroot
