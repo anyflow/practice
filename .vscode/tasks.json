@@ -4,22 +4,30 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Create bin directory",
+            "type": "shell",
+            "command": "mkdir",
+            "args": [
+                "-p",
+                "${fileDirname}/bin"
+            ]
+        },
+        {
             "label": "C++ build",
             "type": "shell",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "osx": {
-                "command": "g++",
-                "args": [
-                    "-g",
-                    "${file}",
-                    "-o",
-                    "${workspaceRoot}/bin/cpp/${fileBasenameNoExtension}",
-                    "-std=c++17"
-                ]
-            }
+            "command": "g++",
+            "args": [
+                "-g",
+                "${file}",
+                "-o",
+                "${fileDirname}/bin/${fileBasenameNoExtension}.out",
+                "-std=c++17"
+            ],
+            "dependsOn": "Create bin directory"
         },
         {
             "label": "java build",

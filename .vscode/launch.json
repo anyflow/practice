@@ -5,7 +5,7 @@
       "name": "C++: Current File",
       "type": "lldb",
       "request": "launch",
-      "program": "${workspaceRoot}/bin/cpp/${fileBasenameNoExtension}",
+      "program": "${fileDirname}/bin/${fileBasenameNoExtension}.out",
       "args": [],
       "stopOnEntry": false,
       "cwd": "${workspaceRoot}",
