@@ -24,7 +24,7 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}/bin/${fileBasenameNoExtension}.out",
+                "${fileDirname}/bin/${fileBasenameNoExtension}",
                 "-std=c++17"
             ],
             "dependsOn": "Create bin directory"
