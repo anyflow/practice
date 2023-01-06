@@ -25,8 +25,14 @@ public:
     //  space complexity : O(N)
     k = k % nums.size();
 
-    nums.insert(nums.begin(), nums.end() - k, nums.end());
-    nums.erase(nums.end() - k, nums.end());
+    // nums.insert(nums.begin(), nums.end() - k, nums.end());
+    // nums.erase(nums.end() - k, nums.end());
+    auto nums_new = vector<int>(nums.end() - k, nums.end());
+    nums_new.insert(nums.end(), nums.begin(), nums.end() - k);
+
+    for (auto& i : nums_new) {
+      cout << i << "|";
+    }
   }
 };
 
@@ -45,7 +51,10 @@ void print(vector<int>& items) {
 int main() {
   vector<int> nums = {1, 2, 3};
 
-  cout << "input: " << endl;
+  nums.erase
+
+          cout
+      << "input: " << endl;
   print(nums);
 
   Solution().rotate(nums, 1);
