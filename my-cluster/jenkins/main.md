@@ -12,31 +12,28 @@
 
 - `kind` 기반의 local Kubernetes에서 테스트한 내용이나, 아래 localhost 특화 사항을 제외한 EKS 등에서도 유효하리라 예상함
 
-### localhost 특화 사항
-
-- **`jenkins-values.yaml`**
-  - `serviceType: NodePort` (131 line) : EKS 등에서는 `LoadBalancer` 또는 ingress 사용
-	- `nodePort: 30001` (132 line) : `NodePort` 사용 시에만 사용
-	- (참고) `NodePort`를 그대로 유지하여도 ingress는 정상 동작함(따라서 ingress 사용 시 `ClusterIP` 등으로 변경 불필요)
-- **`jenkins-ingress.yaml`**
-    - `- host: "jenkins.local"` : localhost에서 호출 시, 동일 ingress 내에 타 domain 기반의 service와 분리를 위해 사용
-    - `/etc/hosts` 파일에 `127.0.0.1	jenkins.local` 추가 필요
-
 ## 파일 설명
 
-- **`kind-config.yaml`**
-  - kind` k8s 클러스터 생성 시 사용하는 config 파일.
+- **`../kind-config.yaml`**
+  - kind k8s 클러스터 생성 시 사용하는 config 파일.
   - `localhost`의 30001 port와 Jenkins Service의 `NodePort` 30001이 매핑됨
   - node의 `hostroot`와 localhost의 `hostroot_in_node`가 매핑됨(for jenkins Persistent Volume)
-- **`jenkins-volume.yaml`**
-  - Jenkins Persistent Volume configuration
-  - node의 `/hostroot/jenkins-volume/`에 jenkins 파일이 위치
-- **`jenkins-sa.yaml`**
-  - Service Account 및 RBAC 설정(role 생성 및 binding)
-- **`jenkins-values.yaml`**
-  - Helm install시 사용되는 values.
-- **`jenkins-ingress.yaml`**
-  - ingress 사용 시의 ingress resource
+- **`resources.yaml`**
+  - **`namespace`**
+    - `jenkins` namespace 생성
+    - node의 `/hostroot/jenkins-volume/`에 jenkins 파일이 위치
+  - **`volume`**
+    - Jenkins Persistent Volume configuration
+    - node의 `/hostroot/jenkins-volume/`에 jenkins 파일이 위치
+  - **`service-account`**
+    - Service Account 및 RBAC 설정(role 생성 및 binding)
+  - **`ingress`**
+    - `- host: "jenkins.local"` : localhost에서 호출 시, 동일 ingress 내에 타 domain 기반의 service와 분리를 위해 사용
+    - `/etc/hosts` 파일에 `127.0.0.1 jenkins.local` 추가 필요
+- **`values.yaml`**
+  - `serviceType: NodePort` (131 line) : EKS 등에서는 `LoadBalancer` 또는 ingress 사용
+    - `nodePort: 30001` (132 line) : `NodePort` 사용 시에만 사용
+    - (참고) `NodePort`를 그대로 유지하여도 ingress는 정상 동작함(따라서 ingress 사용 시 `ClusterIP` 등으로 변경 불필요)
 
 ## Installation
 
@@ -59,19 +56,19 @@ NAME                    CHART VERSION   APP VERSION     DESCRIPTION
 jenkinsci/jenkins       4.2.5           2.361.1         Jenkins - Build great things at any scale! The ...
 
 # jenkins용 Persistent Volume 생성
-> kubectl apply -f ./jenkins-volume.yaml
+> kubectl apply -f ./volume.yaml
 ...
 persistentvolume/jenkins-pv created
 
 # Service Account 생성
-> kubectl apply -f ./jenkins-sa.yaml
+> kubectl apply -f ./service-account.yaml
 ...
 serviceaccount/jenkins created
 clusterrole.rbac.authorization.k8s.io/jenkins created
 clusterrolebinding.rbac.authorization.k8s.io/jenkins created
 
 # Jenkins 설치
-> helm install jenkins -n jenkins -f ./jenkins-values.yaml jenkinsci/jenkins
+> helm install jenkins -n jenkins -f ./values.yaml jenkinsci/jenkins
 ...
 NAME: jenkins
 LAST DEPLOYED: Mon Sep 26 13:20:55 2022
@@ -109,7 +106,7 @@ ingressclass.networking.k8s.io/nginx created
 validatingwebhookconfiguration.admissionregistration.k8s.io/ingress-nginx-admission created
 
 # jenkins ingress resource 설치
-> kubectl apply -f jenkins-ingress.yaml
+> kubectl apply -f ingress.yaml
 ...
 ingress.networking.k8s.io/ingress-jenkins created
 ```
@@ -136,8 +133,16 @@ m780cFwRlqNmDKrboT7VkA
 # ingress 기반 hostname으로 호출
 > open -a safari jenkins.local/login
 ```
+## k8s용 주요 Jenkins Plugin
+
+- [Docker Pipeline Plugin](https://github.com/jenkinsci/docker-workflow-plugin) : Jenkins plugin which allows building, testing, and using Docker images from Jenkins Pipeline projects.
+- [Kubernetes Continuous Deploy Plugin](<https://github.com/jenkinsci/kubernetes-cd-plugin>) : A Jenkins plugin to deploy resource configurations to a Kubernetes cluster.
 
 ## References
 
 - [Installing Jenkins in Kubernetes](https://www.jenkins.io/doc/book/installing/kubernetes/)
 - [NGINX Ingress Controller - Rewrite](https://kubernetes.github.io/ingress-nginx/examples/rewrite/)
+- [Jenkins에서 Kubernetes 플러그인을 이용해 보다 쉽고 효율적으로 성능 테스트하기](https://engineering.linecorp.com/ko/blog/performance-test-in-jenkins-run-dynamic-pod-executors-in-kubernetes-parallelly/)
+- [[ Kube 49.1 ] Deploy to Kubernetes cluster using Jenkins CI/CD pipeline | Building with Kaniko tool](https://www.youtube.com/watch?v=YnZQJAMK6JI)
+- [[FINDA] MSA를 위한 Kubernetes 세팅과 CI/CD Pipeline 구성, 그리고 Monitoring 시스템 구축 — 1](https://medium.com/finda-tech/finda-msa를-위한-kubernetes-세팅과-ci-cd-pipeline-구성-그리고-monitoring-시스템-구축-1-783bf49af15b)
+- [[FINDA] MSA를 위한 Kubernetes 세팅과 CI/CD Pipeline 구성, 그리고 Monitoring 시스템 구축 — 2](https://medium.com/@bsc0227/finda-msa를-위한-kubernetes-세팅과-ci-cd-pipeline-구성-그리고-monitoring-시스템-구축-2-ef29380ec474)
