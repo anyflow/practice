@@ -15,12 +15,19 @@ nodes:
   - containerPort: 80 # for ingress
     hostPort: 80
     protocol: TCP
-  - containerPort: 30001 # for NodePort jenkins
-    hostPort: 30001
+  - containerPort: 32000 # for NodePort jenkins
+    hostPort: 32000
     protocol: TCP
 
 
 - role: worker
   extraMounts:
-    - hostPath: ./hostroot_in_node
-      containerPath: /hostroot
+  - hostPath: ./worker0/var/local-path-provisioner
+    containerPath: /var/local-path-provisioner
+
+# - role: worker
+#   extraMounts:
+#   - hostPath: ./worker1/app
+#     containerPath: /app
+#   - hostPath: ./worker1/var/local-path-provisioner
+#     containerPath: /var/local-path-provisioner

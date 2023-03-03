@@ -16,28 +16,29 @@ default: create_cluster create_ingress_controller
 create_cluster:
 	kind create cluster --config ./kind-config.yaml
 
+delete_cluster: delete_jenkins
 delete_cluster:
+	kubectl delete -f ./jenkins/volume-claim.yaml
+	kubectl delete -f ./jenkins/namespace.yaml
+
 	kind delete cluster -n my-cluster
 
 create_ingress_controller:
 	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 
 	@echo ${Yellow}"Waiting for ingress controller to be ready while maximum 300s ..."${Reset}
-	kubectl wait pods -n ingress-nginx -l app.kubernetes.io/component=controller -l app.kubernetes.io/instance=ingress-nginx --for condition=Ready --timeout=300s
+	kubectl wait pods -n ingress-nginx -l app.kubernetes.io/component=controller --for condition=Ready --timeout=300s
 
 delete_ingress_controller:
 	kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 
 create_jenkins:
+	kubectl apply -f ./jenkins/namespace.yaml
+	kubectl apply -f ./jenkins/volume-claim.yaml
 	kubectl apply -f ./jenkins/resources.yaml
-	helm repo add jenkinsci https://charts.jenkins.io
-	helm repo update
-	helm search repo jenkinsci
-	helm install jenkins -n jenkins -f ./jenkins/values.yaml jenkinsci/jenkins
-
 	@echo ${Yellow}"Waiting for jenkins to be ready while maximum 300s ..."${Reset}
-	kubectl wait pods -n jenkins -l app.kubernetes.io/name=jenkins --for condition=Ready --timeout=300s
+	kubectl wait pods -n jenkins -l app=jenkins --for condition=Ready --timeout=300s
 
 delete_jenkins:
-	helm uninstall jenkins -n jenkins
 	kubectl delete -f ./jenkins/resources.yaml
+	# do not delete namespace and volume claim

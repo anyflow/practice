@@ -21,7 +21,6 @@
 - **`resources.yaml`**
   - **`namespace`**
     - `jenkins` namespace 생성
-    - node의 `/hostroot/jenkins-volume/`에 jenkins 파일이 위치
   - **`volume`**
     - Jenkins Persistent Volume configuration
     - node의 `/hostroot/jenkins-volume/`에 jenkins 파일이 위치
