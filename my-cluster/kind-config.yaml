@@ -15,19 +15,13 @@ nodes:
   - containerPort: 80 # for ingress
     hostPort: 80
     protocol: TCP
-  - containerPort: 32000 # for NodePort jenkins
-    hostPort: 32000
-    protocol: TCP
-
 
 - role: worker
   extraMounts:
   - hostPath: ./worker0/var/local-path-provisioner
-    containerPath: /var/local-path-provisioner
+    containerPath: /var/local-path-provisioner      # pvc에 의한 storage root
 
 # - role: worker
 #   extraMounts:
-#   - hostPath: ./worker1/app
-#     containerPath: /app
 #   - hostPath: ./worker1/var/local-path-provisioner
 #     containerPath: /var/local-path-provisioner

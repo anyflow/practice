@@ -16,11 +16,7 @@ default: create_cluster create_ingress_controller
 create_cluster:
 	kind create cluster --config ./kind-config.yaml
 
-delete_cluster: delete_jenkins
 delete_cluster:
-	kubectl delete -f ./jenkins/volume-claim.yaml
-	kubectl delete -f ./jenkins/namespace.yaml
-
 	kind delete cluster -n my-cluster
 
 create_ingress_controller:
@@ -33,12 +29,31 @@ delete_ingress_controller:
 	kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 
 create_jenkins:
-	kubectl apply -f ./jenkins/namespace.yaml
-	kubectl apply -f ./jenkins/volume-claim.yaml
-	kubectl apply -f ./jenkins/resources.yaml
-	@echo ${Yellow}"Waiting for jenkins to be ready while maximum 300s ..."${Reset}
-	kubectl wait pods -n jenkins -l app=jenkins --for condition=Ready --timeout=300s
+	kubectl apply -f ./jenkins/manifest.yaml
+
+	helm repo add jenkinsci https://charts.jenkins.io
+	helm repo update
+	helm search repo jenkinsci
+
+	helm install jenkins -n jenkins -f ./jenkins/values.yaml jenkinsci/jenkins
+
+	@echo ${Yellow}"Waiting 10s for the jenkins initContainer to be initiated ..."${Reset}
+	@sleep 10
+	@echo ${Blue}"Start tailing the initContainer of the jenkins pod ..."${Reset}
+	kubectl logs jenkins-0 -n jenkins -c init -f
+
+	@echo ${Yellow}"Waiting 5s for the jenkins container to be initiated ..."${Reset}
+	@sleep 5
+	@echo ${Blue}"Start tailing the container of the jenkins pod ..."${Reset}
+	kubectl logs jenkins-0 -n jenkins -f
+
+	@echo ${Greeen}"Jenkins is ready!"${Reset}
+
+	@echo ${Cyan}"ID is 'admin' and password is the below. Good luck!"${Reset}
+	@kubectl get secret -n jenkins jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode; echo
+
+	open -a safari http://jenkins.local/login
 
 delete_jenkins:
-	kubectl delete -f ./jenkins/resources.yaml
-	# do not delete namespace and volume claim
+	helm uninstall jenkins -n jenkins
+	kubectl delete -f ./jenkins/manifest.yaml
