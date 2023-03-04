@@ -18,10 +18,14 @@ nodes:
 
 - role: worker
   extraMounts:
+  - hostPath: ./worker0/app
+    containerPath: /app
   - hostPath: ./worker0/var/local-path-provisioner
-    containerPath: /var/local-path-provisioner      # pvc에 의한 storage root
+    containerPath: /var/local-path-provisioner      # dynamic provisioning에 의한 storage
 
 # - role: worker
 #   extraMounts:
+#   - hostPath: ./worker1/app
+#     containerPath: /app
 #   - hostPath: ./worker1/var/local-path-provisioner
 #     containerPath: /var/local-path-provisioner
