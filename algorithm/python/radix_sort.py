@@ -38,7 +38,7 @@ def digit_count_of(num):
     return ret
 
 
-def radix_sort(arr):
+def sort(arr):
     # complexities of time, space: Ot(digit_count) * Ot(N), O(N)
     if len(arr) <= 0:
         return arr
@@ -67,7 +67,7 @@ def test_sort():
 
     for case in test_cases:
         original = case.copy()
-        sorted_arr = radix_sort(case)
+        sorted_arr = sort(case)
         print(f"Original array: {original}")
         print(f"Sorted array:   {sorted_arr}")
         print("-" * 50)
