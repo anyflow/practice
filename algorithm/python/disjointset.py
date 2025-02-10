@@ -28,13 +28,8 @@ class DisjointSet:
 
 
 if __name__ == "__main__":
-    ds = DisjointSet(5)
+    ds = DisjointSet(4)
 
     print(ds.union(0, 1), ds.parent, ds.rank)
-    print(ds.union(1, 2), ds.parent, ds.rank)
-    print(ds.find(0), ds.parent, ds.rank)
-    print(ds.find(1), ds.parent, ds.rank)
-    print(ds.connected(0, 1), ds.parent, ds.rank)
-
-    print(ds.union(3, 4), ds.parent, ds.rank)
-    print(ds.connected(0, 4), ds.parent, ds.rank)
+    print(ds.union(2, 3), ds.parent, ds.rank)
+    print(ds.union(0, 2), ds.parent, ds.rank)
