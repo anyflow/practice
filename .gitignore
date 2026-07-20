@@ -4,6 +4,9 @@ bin
 #python
 **/*.pyc
 
+**/a
+**/a.dSYM/**
+
 #java
 .project
 .settings
